@@ -22,6 +22,18 @@
   --color-danger-500: #ef4444;
 }
 
+/* ─── Hide browser built-in password reveal/credential buttons ── */
+input[type="password"]::-ms-reveal,
+input[type="password"]::-ms-clear {
+  display: none;
+}
+input::-webkit-credentials-auto-fill-button,
+input::-webkit-strong-password-auto-fill-button {
+  display: none !important;
+  visibility: hidden;
+  pointer-events: none;
+}
+
 /* ─── Glass card ────────────────────────────────────────── */
 .glass {
   background: rgba(255, 255, 255, 0.72);
