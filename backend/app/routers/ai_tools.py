@@ -49,11 +49,26 @@ class DayTask(BaseModel):
     type: str
     description: str
     duration_min: int = 10
+    topic: str = ""
+    goal: str = ""
 
 
 class DayPlan(BaseModel):
     day: str
+    focus: str = ""
     tasks: list[DayTask]
+    daily_goal: str = ""
+
+
+class WeeklyMilestone(BaseModel):
+    title: str
+    description: str
+
+
+class LearningResource(BaseModel):
+    title: str
+    type: str
+    description: str
 
 
 class LearningPlanResponse(BaseModel):
@@ -62,6 +77,9 @@ class LearningPlanResponse(BaseModel):
     weekly_goal_xp: int
     tips: list[str]
     daily_plan: list[DayPlan]
+    milestones: list[WeeklyMilestone] = []
+    resources: list[LearningResource] = []
+    motivation_quote: str = ""
 
 
 @router.post("/learning-plan", response_model=LearningPlanResponse)
@@ -96,35 +114,84 @@ def generate_learning_plan(
     else:
         level = "C1"
 
-    prompt = f"""Create a personalized 7-day {language.name} study plan.
-Student: level={level}, xp={total_xp}, lessons_completed={lessons_done}.
+    prompt = f"""Create a highly detailed, personalized 7-day {language.name} study plan.
+Student profile: level={level}, xp={total_xp}, lessons_completed={lessons_done}.
 
-Return ONLY valid JSON:
+Return ONLY valid JSON matching this exact structure:
 {{
   "recommended_level": "{level}",
-  "weekly_goal_xp": 200,
-  "tips": ["tip1", "tip2", "tip3"],
+  "weekly_goal_xp": 350,
+  "motivation_quote": "An inspiring quote about language learning in Ukrainian",
+  "tips": [
+    "Specific actionable tip 1 for {language.name} learners at {level}",
+    "Specific actionable tip 2 — pronunciation/script specific advice",
+    "Specific actionable tip 3 — memory technique",
+    "Specific actionable tip 4 — immersion strategy",
+    "Specific actionable tip 5 — common mistake to avoid"
+  ],
+  "milestones": [
+    {{"title": "Milestone by day 2", "description": "Concrete measurable goal"}},
+    {{"title": "Milestone by day 4", "description": "Concrete measurable goal"}},
+    {{"title": "Milestone by day 7", "description": "Concrete measurable goal"}}
+  ],
+  "resources": [
+    {{"title": "Resource name", "type": "app/website/book/podcast", "description": "Why this resource for {language.name}"}},
+    {{"title": "Resource name", "type": "app/website/book/podcast", "description": "Why this resource"}},
+    {{"title": "Resource name", "type": "app/website/book/podcast", "description": "Why this resource"}}
+  ],
   "daily_plan": [
     {{
       "day": "Понеділок",
+      "focus": "Main theme of the day in Ukrainian",
+      "daily_goal": "What the student should be able to do after today",
       "tasks": [
-        {{"type": "lesson", "description": "...", "duration_min": 15}},
-        {{"type": "vocab", "description": "...", "duration_min": 10}}
+        {{
+          "type": "lesson",
+          "description": "Detailed description of what to study",
+          "topic": "Specific grammar/vocabulary topic",
+          "goal": "Concrete learning outcome",
+          "duration_min": 20
+        }},
+        {{
+          "type": "vocab",
+          "description": "Specific words or phrases to learn",
+          "topic": "Word category",
+          "goal": "Know X new words",
+          "duration_min": 15
+        }},
+        {{
+          "type": "pronunciation",
+          "description": "Specific sounds or patterns to practice",
+          "topic": "Phonetic feature",
+          "goal": "Pronunciation outcome",
+          "duration_min": 10
+        }}
       ]
     }}
   ]
 }}
-Use Ukrainian for day names (Понеділок..Неділя) and task descriptions.
-Include all 7 days. Task types: lesson, vocab, chat, review, pronunciation."""
+
+Rules:
+- Use Ukrainian for all day names (Понеділок, Вівторок, Середа, Четвер, П'ятниця, Субота, Неділя) and descriptions.
+- Include ALL 7 days, each with 3-4 tasks.
+- Each task description must be SPECIFIC to {language.name} at {level} level (name actual topics, words, grammar rules).
+- Task types to use: lesson, vocab, chat, review, pronunciation, reading, writing.
+- Make each day have a different focus theme (e.g. greetings, numbers, food, transport...).
+- Milestones must be concrete and measurable (e.g. "Know 50 words", "Conjugate 3 verb tenses").
+- Resources must be real, well-known apps/sites for {language.name} learning.
+- Tips must be specific to {language.name} script/grammar/culture."""
 
     try:
-        plan = ai_service.complete_json(prompt, temperature=0.6, max_tokens=2000)
+        plan = ai_service.complete_json(prompt, temperature=0.6, max_tokens=4000)
         return LearningPlanResponse(
             language_name=language.name,
             recommended_level=plan.get("recommended_level", level),
-            weekly_goal_xp=plan.get("weekly_goal_xp", 200),
+            weekly_goal_xp=plan.get("weekly_goal_xp", 350),
             tips=plan.get("tips", []),
             daily_plan=[DayPlan(**d) for d in plan.get("daily_plan", [])],
+            milestones=[WeeklyMilestone(**m) for m in plan.get("milestones", [])],
+            resources=[LearningResource(**r) for r in plan.get("resources", [])],
+            motivation_quote=plan.get("motivation_quote", ""),
         )
     except Exception as e:
         raise HTTPException(status_code=502, detail=f"AI error: {e}")

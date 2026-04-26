@@ -206,32 +206,88 @@ export default function DashboardPage() {
                   exit={{ opacity: 0, height: 0 }}
                   className="overflow-hidden"
                 >
+                  {/* Header */}
                   <div className="flex items-center gap-3 mb-3 pb-3 border-b border-gray-100 dark:border-white/8">
                     <span className="text-xs font-bold px-2 py-0.5 bg-violet-100 dark:bg-violet-500/15 text-violet-700 dark:text-violet-300 rounded-full">
                       {plan.recommended_level}
                     </span>
                     <span className="text-xs text-gray-500">Ціль: {plan.weekly_goal_xp} XP/тиждень</span>
+                    <span className="text-xs text-gray-400">{plan.language_name}</span>
                   </div>
-                  <div className="space-y-2 max-h-64 overflow-y-auto pr-1">
+
+                  {/* Motivation quote */}
+                  {plan.motivation_quote && (
+                    <p className="text-xs italic text-violet-500 mb-3 border-l-2 border-violet-200 pl-2">
+                      {plan.motivation_quote}
+                    </p>
+                  )}
+
+                  {/* Daily plan */}
+                  <div className="space-y-3 max-h-72 overflow-y-auto pr-1 mb-3">
                     {plan.daily_plan.map((day) => (
-                      <div key={day.day} className="text-sm">
-                        <p className="font-semibold text-gray-700">{day.day}</p>
-                        {day.tasks.map((t, i) => (
-                          <p key={i} className="text-gray-500 text-xs ml-2">
-                            {TASK_TYPE_ICONS[t.type] ?? '•'} {t.description} ({t.duration_min} хв)
-                          </p>
-                        ))}
+                      <div key={day.day} className="rounded-xl bg-gray-50 dark:bg-white/[0.03] p-3">
+                        <div className="flex items-center justify-between mb-1">
+                          <p className="font-semibold text-gray-800 text-sm">{day.day}</p>
+                          {day.focus && <span className="text-xs text-violet-500 font-medium">{day.focus}</span>}
+                        </div>
+                        {day.daily_goal && (
+                          <p className="text-xs text-emerald-600 dark:text-emerald-400 mb-1.5">🎯 {day.daily_goal}</p>
+                        )}
+                        <div className="space-y-1">
+                          {day.tasks.map((t, i) => (
+                            <div key={i} className="text-xs text-gray-600 dark:text-gray-400">
+                              <span>{TASK_TYPE_ICONS[t.type] ?? '•'} <span className="font-medium">{t.description}</span></span>
+                              {t.topic && <span className="text-gray-400"> — {t.topic}</span>}
+                              <span className="ml-1 text-gray-400">({t.duration_min} хв)</span>
+                              {t.goal && <p className="ml-4 text-gray-400 italic">{t.goal}</p>}
+                            </div>
+                          ))}
+                        </div>
                       </div>
                     ))}
                   </div>
+
+                  {/* Milestones */}
+                  {(plan.milestones?.length ?? 0) > 0 && (
+                    <div className="mb-3 pt-3 border-t border-gray-100 dark:border-white/8">
+                      <p className="text-xs font-semibold text-gray-600 mb-1.5">🏆 Віхи тижня:</p>
+                      <div className="space-y-1">
+                        {plan.milestones!.map((m, i) => (
+                          <div key={i} className="text-xs">
+                            <span className="font-medium text-gray-700">{m.title}:</span>{' '}
+                            <span className="text-gray-500">{m.description}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Resources */}
+                  {(plan.resources?.length ?? 0) > 0 && (
+                    <div className="mb-3 pt-3 border-t border-gray-100 dark:border-white/8">
+                      <p className="text-xs font-semibold text-gray-600 mb-1.5">📱 Ресурси:</p>
+                      <div className="space-y-1">
+                        {plan.resources!.map((r, i) => (
+                          <div key={i} className="text-xs">
+                            <span className="font-medium text-gray-700">{r.title}</span>
+                            <span className="text-gray-400"> ({r.type})</span>
+                            {' — '}<span className="text-gray-500">{r.description}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Tips */}
                   {plan.tips.length > 0 && (
-                    <div className="mt-3 pt-3 border-t border-gray-100 dark:border-white/8">
+                    <div className="pt-3 border-t border-gray-100 dark:border-white/8">
                       <p className="text-xs font-semibold text-gray-500 mb-1">💡 Поради:</p>
                       {plan.tips.map((tip, i) => (
                         <p key={i} className="text-xs text-gray-400">• {tip}</p>
                       ))}
                     </div>
                   )}
+
                   <button onClick={() => setPlan(null)}
                     className="mt-3 text-xs text-violet-500 hover:underline">
                     Скласти новий план

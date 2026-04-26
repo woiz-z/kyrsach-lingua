@@ -395,9 +395,9 @@ export default function LanguagesPage() {
                   onChange={(e) => setCourseLevel(e.target.value)}
                   className="px-4 py-2.5 rounded-xl border border-gray-200 bg-white/70 focus:border-primary-400 focus:ring-2 focus:ring-primary-100 outline-none transition-all"
                 >
-                  {(['A1', 'A2', 'B1', 'B2', 'C1', 'C2'] as const).map((l) => {
-                    const labels: Record<string, string> = { A1: 'Початковий', A2: 'Елементарний', B1: 'Середній', B2: 'Вище середнього', C1: 'Просунутий', C2: 'Вільне володіння' };
-                    return <option key={l} value={l}>{l} — {labels[l]}</option>;
+                  {(['A1', 'A2', 'B1', 'B2', 'C1', 'C2', ...(selectedLanguage?.code === 'ar' ? ['C4'] : [])] as string[]).map((l) => {
+                    const labels: Record<string, string> = { A1: 'Початковий', A2: 'Елементарний', B1: 'Середній', B2: 'Вище середнього', C1: 'Просунутий', C2: 'Вільне володіння', C4: 'Майстерність' };
+                    return <option key={l} value={l}>{l} — {labels[l] ?? l}</option>;
                   })}
                 </select>
                 <div className="rounded-xl border border-gray-200 bg-white/70 px-3 py-2">

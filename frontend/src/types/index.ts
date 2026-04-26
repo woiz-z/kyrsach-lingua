@@ -263,11 +263,26 @@ export interface DayTask {
   type: string;
   description: string;
   duration_min: number;
+  topic?: string;
+  goal?: string;
 }
 
 export interface DayPlan {
   day: string;
+  focus?: string;
   tasks: DayTask[];
+  daily_goal?: string;
+}
+
+export interface WeeklyMilestone {
+  title: string;
+  description: string;
+}
+
+export interface LearningResource {
+  title: string;
+  type: string;
+  description: string;
 }
 
 export interface LearningPlanResponse {
@@ -276,6 +291,9 @@ export interface LearningPlanResponse {
   weekly_goal_xp: number;
   tips: string[];
   daily_plan: DayPlan[];
+  milestones?: WeeklyMilestone[];
+  resources?: LearningResource[];
+  motivation_quote?: string;
 }
 
 
