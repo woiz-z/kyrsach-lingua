@@ -13,6 +13,7 @@ import {
   Plus,
   Languages,
   Volume2,
+  AlertCircle,
 } from 'lucide-react';
 import api from '../services/api';
 import type { VocabularyItem } from '../types';
@@ -45,10 +46,11 @@ export default function VocabularyPage() {
     queryFn: () => api.get('/vocabulary/').then((r) => r.data),
   });
 
-  const { data: dueItems, isLoading: dueLoading } = useQuery<VocabularyItem[]>({
+  const { data: dueItems, isLoading: dueLoading, isError: dueError, refetch: refetchDue } = useQuery<VocabularyItem[]>({
     queryKey: ['vocabulary-due'],
     queryFn: () => api.get('/vocabulary/due').then((r) => r.data),
     enabled: tab === 'review',
+    staleTime: 5 * 60 * 1000, // 5 min — prevents mid-session refetch on network reconnect
   });
 
   const deleteMutation = useMutation({
@@ -282,7 +284,19 @@ export default function VocabularyPage() {
         <>
           {dueLoading ? (
             <div className="h-64 skeleton rounded-2xl" />
-          ) : reviewDone || !dueItems || dueItems.length === 0 ? (
+          ) : dueError ? (
+            <div className="glass rounded-2xl p-8 text-center border border-red-100">
+              <AlertCircle className="w-10 h-10 text-red-400 mx-auto mb-3" />
+              <p className="font-semibold text-gray-800 mb-1">Не вдалося завантажити слова</p>
+              <p className="text-sm text-gray-500 mb-4">Перевірте з'єднання та спробуйте ще раз.</p>
+              <button
+                onClick={() => refetchDue()}
+                className="flex items-center gap-2 mx-auto px-5 py-2.5 rounded-xl text-white font-semibold gradient-bg shadow-lg shadow-primary-500/20 transition-all"
+              >
+                <RotateCcw className="w-4 h-4" /> Спробувати знову
+              </button>
+            </div>
+          ) : reviewDone || !dueItems || dueItems.length === 0 || reviewIdx >= dueItems.length ? (
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
