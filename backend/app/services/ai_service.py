@@ -65,9 +65,32 @@ class AIService:
             self.client = None
             self.model = None
 
+        # Always keep an OpenRouter client as fallback (used when Gemini hits 429)
+        self._openrouter_client: OpenAI | None = (
+            OpenAI(base_url=settings.OPENROUTER_BASE_URL, api_key=settings.OPENROUTER_API_KEY)
+            if settings.OPENROUTER_API_KEY
+            else None
+        )
+
     def get_system_prompt(self, mode: str, language_name: str) -> str:
         template = _SYSTEM_PROMPTS.get(mode, _SYSTEM_PROMPTS["free_chat"])
         return template.format(language=language_name)
+
+    def _chat_model_candidates(self) -> list[tuple[OpenAI, str]]:
+        """Returns (client, model) pairs to try for chat, in priority order."""
+        pairs: list[tuple[OpenAI, str]] = []
+        if self.client is not None:
+            for model in [self.model, "gemini-2.0-flash", "gemini-2.0-flash-lite", "gemini-flash-lite-latest"]:
+                if model and (self.client, model) not in pairs:
+                    pairs.append((self.client, model))
+        if self._openrouter_client is not None and self._openrouter_client is not self.client:
+            for model in ["qwen/qwen3.6-plus:free", "openai/gpt-oss-20b:free", "meta-llama/llama-3.3-70b-instruct:free"]:
+                pairs.append((self._openrouter_client, model))
+        return pairs
+
+    def _is_retryable(self, exc: Exception) -> bool:
+        s = str(exc).lower()
+        return any(k in s for k in ("429", "quota", "rate limit", "resource_exhausted", "overloaded"))
 
     def _json_model_candidates(self) -> list[str]:
         candidates = [
@@ -247,15 +270,25 @@ class AIService:
             raise RuntimeError("No AI provider configured. Set GOOGLE_AI_STUDIO_KEY or OPENROUTER_API_KEY.")
         system_prompt = self.get_system_prompt(mode, language_name)
         full_messages = [{"role": "system", "content": system_prompt}] + messages
+        last_exc: Exception | None = None
 
-        response = self.client.chat.completions.create(
-            model=self.model,
-            messages=full_messages,
-            temperature=0.7,
-            max_tokens=1024,
-        )
-        content = response.choices[0].message.content or ""
-        return self._sanitize_output(content)
+        for client, model in self._chat_model_candidates():
+            try:
+                response = client.chat.completions.create(
+                    model=model,
+                    messages=full_messages,
+                    temperature=0.7,
+                    max_tokens=1024,
+                )
+                content = response.choices[0].message.content or ""
+                return self._sanitize_output(content)
+            except Exception as exc:
+                last_exc = exc
+                if self._is_retryable(exc):
+                    continue
+                raise
+
+        raise last_exc or RuntimeError("All chat models failed")
 
     def chat_stream(
         self,
@@ -268,13 +301,24 @@ class AIService:
         system_prompt = self.get_system_prompt(mode, language_name)
         full_messages = [{"role": "system", "content": system_prompt}] + messages
 
-        stream = self.client.chat.completions.create(
-            model=self.model,
-            messages=full_messages,
-            temperature=0.7,
-            max_tokens=1024,
-            stream=True,
-        )
+        stream = None
+        for client, model in self._chat_model_candidates():
+            try:
+                stream = client.chat.completions.create(
+                    model=model,
+                    messages=full_messages,
+                    temperature=0.7,
+                    max_tokens=1024,
+                    stream=True,
+                )
+                break
+            except Exception as exc:
+                if self._is_retryable(exc):
+                    continue
+                raise
+
+        if stream is None:
+            raise RuntimeError("All chat models returned 429 / quota exceeded")
 
         buffer = ""
         in_think = False
