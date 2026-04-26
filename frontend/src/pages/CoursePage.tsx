@@ -65,7 +65,7 @@ export default function CoursePage() {
 
   const { data: progressList } = useQuery<UserProgress[]>({
     queryKey: ['user-lesson-progress'],
-    queryFn: () => api.get('/progress').then((r) => r.data),
+    queryFn: () => api.get('/progress/').then((r) => r.data),
     staleTime: 30 * 1000,
   });
 

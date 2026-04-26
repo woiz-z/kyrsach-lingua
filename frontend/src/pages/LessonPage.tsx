@@ -325,10 +325,13 @@ export default function LessonPage() {
       setCompletedLesson(true);
       setShowConfetti(true);
       play('complete');
-      qc.invalidateQueries({ queryKey: ['progress'] });
+      qc.invalidateQueries({ queryKey: ['progress-history'] });
+      qc.invalidateQueries({ queryKey: ['progress-stats'] });
+      qc.invalidateQueries({ queryKey: ['progress-streak'] });
+      qc.invalidateQueries({ queryKey: ['progress-achievements'] });
       qc.invalidateQueries({ queryKey: ['user-lesson-progress'] });
-      qc.invalidateQueries({ queryKey: ['stats'] });
-      qc.invalidateQueries({ queryKey: ['streak'] });
+      qc.invalidateQueries({ queryKey: ['daily-tasks'] });
+      qc.invalidateQueries({ queryKey: ['leaderboard'] });
     },
     onError: () => toast('error', 'Помилка при завершенні уроку'),
   });

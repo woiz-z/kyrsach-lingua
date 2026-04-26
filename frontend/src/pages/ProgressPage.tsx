@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { BarChart3, Trophy, Target, Flame, TrendingUp, BookOpen, Star, CheckCircle2, ArrowRight, Activity, Medal, Crown } from 'lucide-react';
+import { BarChart3, Trophy, Target, Flame, TrendingUp, BookOpen, Star, CheckCircle2, ArrowRight, Activity, Medal, Crown, Loader2 } from 'lucide-react';
 import api from '../services/api';
 import type { Achievement, LeaderboardEntry, UserProgress, UserStats, UserStreak } from '../types';
 
@@ -25,9 +25,9 @@ export default function ProgressPage() {
     queryFn: () => api.get('/progress/achievements').then((r) => r.data),
   });
 
-  const { data: recentProgress } = useQuery<UserProgress[]>({
+  const { data: recentProgress, isLoading: recentLoading } = useQuery<UserProgress[]>({
     queryKey: ['progress-history'],
-    queryFn: () => api.get('/progress').then((r) => r.data),
+    queryFn: () => api.get('/progress/').then((r) => r.data),
   });
 
   const { data: leaderboard } = useQuery<LeaderboardEntry[]>({
@@ -210,9 +210,14 @@ export default function ProgressPage() {
         <div className="flex items-center gap-2 mb-4">
           <BookOpen className="w-5 h-5 text-primary-500" />
           <h2 className="text-lg font-bold text-gray-900">Остання активність</h2>
-          <span className="ml-auto text-sm text-gray-400">{recentItems.length}</span>
+          <span className="ml-auto text-sm text-gray-400">{recentLoading ? '…' : recentItems.length}</span>
         </div>
-        {recentItems.length > 0 ? (
+        {recentLoading ? (
+          <div className="glass rounded-2xl p-6 border border-gray-100 flex items-center justify-center gap-2 text-gray-400">
+            <Loader2 className="w-4 h-4 animate-spin" />
+            <span className="text-sm">Завантаження активності…</span>
+          </div>
+        ) : recentItems.length > 0 ? (
           <div className="space-y-3">
             {recentItems.map((entry) => (
               <Link
@@ -220,12 +225,18 @@ export default function ProgressPage() {
                 to={entry.course_id ? `/courses/${entry.course_id}` : `/lessons/${entry.lesson_id}`}
                 className="glass rounded-2xl p-4 border border-gray-100 flex items-center gap-4 hover-lift transition-all"
               >
-                <div className="w-11 h-11 rounded-xl bg-primary-50 flex items-center justify-center text-primary-600 shrink-0">
+                <div className="w-11 h-11 rounded-xl bg-emerald-50 flex items-center justify-center text-emerald-600 shrink-0">
                   <CheckCircle2 className="w-5 h-5" />
                 </div>
                 <div className="min-w-0 flex-1">
-                  <p className="font-semibold text-gray-900">Урок #{entry.lesson_id}</p>
-                  <p className="text-sm text-gray-500">Результат: {entry.score}% • XP: {entry.xp_earned ?? 0}</p>
+                  <p className="font-semibold text-gray-900">Урок завершено ✓</p>
+                  <p className="text-sm text-gray-500">
+                    Результат: {entry.score}%
+                    {' • '}+{entry.xp_earned ?? 0} XP
+                    {entry.completed_at && (
+                      <> • {new Date(entry.completed_at).toLocaleDateString('uk-UA', { day: 'numeric', month: 'short' })}</>
+                    )}
+                  </p>
                 </div>
                 <ArrowRight className="w-4 h-4 text-gray-300" />
               </Link>
@@ -233,7 +244,7 @@ export default function ProgressPage() {
           </div>
         ) : (
           <div className="glass rounded-2xl p-6 text-sm text-gray-500 border border-gray-100">
-            Історії прогресу ще немає. Завершіть перший урок, щоб тут з’явилися записи.
+            Історії прогресу ще немає. Завершіть перший урок, щоб тут з'явилися записи.
           </div>
         )}
       </motion.div>
