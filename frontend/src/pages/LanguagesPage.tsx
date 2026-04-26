@@ -395,9 +395,10 @@ export default function LanguagesPage() {
                   onChange={(e) => setCourseLevel(e.target.value)}
                   className="px-4 py-2.5 rounded-xl border border-gray-200 bg-white/70 focus:border-primary-400 focus:ring-2 focus:ring-primary-100 outline-none transition-all"
                 >
-                  {['A1', 'A2', 'B1', 'B2'].map((l) => (
-                    <option key={l} value={l}>{l} — {l === 'A1' ? 'Початковий' : l === 'A2' ? 'Елементарний' : l === 'B1' ? 'Середній' : 'Вище середнього'}</option>
-                  ))}
+                  {(['A1', 'A2', 'B1', 'B2', 'C1', 'C2'] as const).map((l) => {
+                    const labels: Record<string, string> = { A1: 'Початковий', A2: 'Елементарний', B1: 'Середній', B2: 'Вище середнього', C1: 'Просунутий', C2: 'Вільне володіння' };
+                    return <option key={l} value={l}>{l} — {labels[l]}</option>;
+                  })}
                 </select>
                 <div className="rounded-xl border border-gray-200 bg-white/70 px-3 py-2">
                   <label className="block text-xs font-semibold text-gray-500 mb-1">Мова пояснень (початкова)</label>
