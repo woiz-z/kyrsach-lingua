@@ -46,14 +46,24 @@ Your name is LingoBot. Create interactive exercises:
 
 class AIService:
     def __init__(self):
-        if not settings.GOOGLE_AI_STUDIO_KEY:
-            raise ValueError("GOOGLE_AI_STUDIO_KEY is required")
-        self.provider = "google"
-        self.client = OpenAI(
-            base_url=settings.GOOGLE_AI_STUDIO_BASE_URL,
-            api_key=settings.GOOGLE_AI_STUDIO_KEY,
-        )
-        self.model = settings.GOOGLE_AI_STUDIO_MODEL
+        if settings.GOOGLE_AI_STUDIO_KEY:
+            self.provider = "google"
+            self.client = OpenAI(
+                base_url=settings.GOOGLE_AI_STUDIO_BASE_URL,
+                api_key=settings.GOOGLE_AI_STUDIO_KEY,
+            )
+            self.model = settings.GOOGLE_AI_STUDIO_MODEL
+        elif settings.OPENROUTER_API_KEY:
+            self.provider = "openrouter"
+            self.client = OpenAI(
+                base_url=settings.OPENROUTER_BASE_URL,
+                api_key=settings.OPENROUTER_API_KEY,
+            )
+            self.model = settings.OPENROUTER_MODEL
+        else:
+            self.provider = None
+            self.client = None
+            self.model = None
 
     def get_system_prompt(self, mode: str, language_name: str) -> str:
         template = _SYSTEM_PROMPTS.get(mode, _SYSTEM_PROMPTS["free_chat"])
@@ -168,6 +178,8 @@ class AIService:
         temperature: float = 0.4,
         max_tokens: int = 2000,
     ) -> dict:
+        if self.client is None:
+            raise RuntimeError("No AI provider configured. Set GOOGLE_AI_STUDIO_KEY or OPENROUTER_API_KEY.")
         last_exc: Exception | None = None
 
         for model in self._json_model_candidates():
@@ -231,6 +243,8 @@ class AIService:
         mode: str,
         language_name: str,
     ) -> str:
+        if self.client is None:
+            raise RuntimeError("No AI provider configured. Set GOOGLE_AI_STUDIO_KEY or OPENROUTER_API_KEY.")
         system_prompt = self.get_system_prompt(mode, language_name)
         full_messages = [{"role": "system", "content": system_prompt}] + messages
 
@@ -249,6 +263,8 @@ class AIService:
         mode: str,
         language_name: str,
     ):
+        if self.client is None:
+            raise RuntimeError("No AI provider configured. Set GOOGLE_AI_STUDIO_KEY or OPENROUTER_API_KEY.")
         system_prompt = self.get_system_prompt(mode, language_name)
         full_messages = [{"role": "system", "content": system_prompt}] + messages
 
