@@ -26,16 +26,22 @@ def translate_word(
         f"to language ISO code '{target_lang}'. "
         "Return ONLY the translation — no explanation, no punctuation beyond the word itself."
     )
-    try:
-        raw = ai_service.client.chat.completions.create(
-            model=ai_service.model,
-            messages=[{"role": "user", "content": prompt}],
-            temperature=0.1,
-            max_tokens=80,
-        )
-        translation = ai_service._sanitize_output(raw.choices[0].message.content or "")
-    except Exception:
-        translation = ""
+    messages = [{"role": "user", "content": prompt}]
+    translation = ""
+    for client, model in ai_service._chat_model_candidates():
+        try:
+            raw = client.chat.completions.create(
+                model=model,
+                messages=messages,
+                temperature=0.1,
+                max_tokens=80,
+            )
+            translation = ai_service._sanitize_output(raw.choices[0].message.content or "")
+            break
+        except Exception as exc:
+            if ai_service._is_retryable(exc):
+                continue
+            break
     return {"word": word, "translation": translation, "source_lang": source_lang, "target_lang": target_lang}
 
 
