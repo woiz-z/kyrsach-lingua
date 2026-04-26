@@ -1,5 +1,6 @@
 import smtplib
 import ssl
+import socket
 import logging
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
@@ -107,7 +108,13 @@ def send_password_reset_email(to_email: str, reset_url: str, full_name: str) -> 
 
     context = ssl.create_default_context()
     try:
-        with smtplib.SMTP(settings.SMTP_HOST, settings.SMTP_PORT, timeout=15) as server:
+        # Force IPv4 — Railway containers lack IPv6 routing; getaddrinfo(AF_INET)
+        # returns an IPv4 address so smtplib never tries the unreachable IPv6 path.
+        infos = socket.getaddrinfo(
+            settings.SMTP_HOST, settings.SMTP_PORT, socket.AF_INET, socket.SOCK_STREAM
+        )
+        smtp_ip = infos[0][4][0]
+        with smtplib.SMTP(smtp_ip, settings.SMTP_PORT, timeout=15) as server:
             server.ehlo()
             server.starttls(context=context)
             server.login(settings.SMTP_USER, settings.SMTP_PASSWORD)
