@@ -99,11 +99,11 @@ def _run_course_generation_job(
         course.title = plan["title"]
         course.description = plan["description"]
         course.level = requested_level
-        _merge_job_payload(job, progress_percent=15, progress_message="План готовий, генеруємо уроки паралельно", lessons_total=actual_lessons_count)
-        db.commit()
 
         lessons_in_plan = plan["lessons"]
         actual_lessons_count = len(lessons_in_plan)
+        _merge_job_payload(job, progress_percent=15, progress_message="План готовий, генеруємо уроки паралельно", lessons_total=actual_lessons_count)
+        db.commit()
         completed_count = 0
         completed_lock = threading.Lock()
 

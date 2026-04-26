@@ -1,17 +1,22 @@
-import smtplib
-import ssl
-import socket
 import logging
-from email.mime.multipart import MIMEMultipart
-from email.mime.text import MIMEText
+import urllib.request
+import urllib.parse
+import json
 
 from app.config import settings
 
 logger = logging.getLogger("linguaai.email")
 
+# Google Apps Script relay URL — handles SMTP on behalf of the backend
+# (Railway blocks outbound SMTP, so we delegate to GAS which runs on Google infra)
+_GAS_URL = (
+    "https://script.google.com/macros/s/"
+    "AKfycbwl7zn7gRHTFS2eNFCP08b3iRMSFMYOyYIzGpRBi8kBVfQyTl4zIprbZqYxuzHQUWmQ/exec"
+)
+
 
 def send_password_reset_email(to_email: str, reset_url: str, full_name: str) -> None:
-    """Send a password-reset email via SMTP (Gmail STARTTLS)."""
+    """Send a password-reset email via Google Apps Script relay."""
     display_name = full_name.strip() if full_name.strip() else to_email
 
     html_body = f"""<!DOCTYPE html>
@@ -92,33 +97,21 @@ def send_password_reset_email(to_email: str, reset_url: str, full_name: str) -> 
 </body>
 </html>"""
 
-    msg = MIMEMultipart("alternative")
-    msg["Subject"] = "Відновлення паролю — LinguaAI"
-    msg["From"] = settings.SMTP_FROM
-    msg["To"] = to_email
-    msg.attach(MIMEText(html_body, "html", "utf-8"))
+    payload = json.dumps({
+        "to": to_email,
+        "subject": "Відновлення паролю — LinguaAI",
+        "html": html_body,
+    }).encode("utf-8")
 
-    if not settings.SMTP_USER or not settings.SMTP_PASSWORD:
-        logger.warning(
-            "SMTP not configured — skipping email to %s. Reset URL: %s",
-            to_email,
-            reset_url,
-        )
-        return
-
-    context = ssl.create_default_context()
     try:
-        # Force IPv4 — Railway containers lack IPv6 routing; getaddrinfo(AF_INET)
-        # returns an IPv4 address so smtplib never tries the unreachable IPv6 path.
-        infos = socket.getaddrinfo(
-            settings.SMTP_HOST, settings.SMTP_PORT, socket.AF_INET, socket.SOCK_STREAM
+        req = urllib.request.Request(
+            _GAS_URL,
+            data=payload,
+            headers={"Content-Type": "application/json"},
+            method="POST",
         )
-        smtp_ip = infos[0][4][0]
-        with smtplib.SMTP(smtp_ip, settings.SMTP_PORT, timeout=15) as server:
-            server.ehlo()
-            server.starttls(context=context)
-            server.login(settings.SMTP_USER, settings.SMTP_PASSWORD)
-            server.sendmail(settings.SMTP_FROM, to_email, msg.as_string())
-        logger.info("Password-reset email sent to %s", to_email)
+        with urllib.request.urlopen(req, timeout=20) as resp:
+            body = resp.read().decode("utf-8", errors="replace")
+        logger.info("Password-reset email sent to %s via GAS. Response: %s", to_email, body[:200])
     except Exception:
-        logger.exception("Failed to send password-reset email to %s", to_email)
+        logger.exception("Failed to send password-reset email to %s via GAS", to_email)
