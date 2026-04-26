@@ -49,6 +49,7 @@ def translate_word(
 
 class LearningPlanRequest(BaseModel):
     language_code: str = Field(..., min_length=2, max_length=10)
+    level: str | None = Field(default=None, pattern=r'^(A1|A2|B1|B2|C1|C2)$')
 
 
 class DayTask(BaseModel):
@@ -109,7 +110,9 @@ def generate_learning_plan(
         .scalar() or 0
     )
 
-    if total_xp < 100:
+    if data.level:
+        level = data.level
+    elif total_xp < 100:
         level = "A1"
     elif total_xp < 300:
         level = "A2"

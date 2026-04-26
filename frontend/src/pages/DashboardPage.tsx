@@ -29,6 +29,7 @@ const TASK_TYPE_ICONS: Record<string, string> = {
 export default function DashboardPage() {
   const { user } = useAuthStore();
   const [planLangCode, setPlanLangCode] = useState('');
+  const [planLevel, setPlanLevel] = useState('');
   const [planOpen, setPlanOpen] = useState(false);
   const [plan, setPlan] = useState<LearningPlanResponse | null>(null);
 
@@ -38,7 +39,7 @@ export default function DashboardPage() {
 
   const planMutation = useMutation({
     mutationFn: (lang: string) =>
-      api.post('/ai-tools/learning-plan', { language_code: lang }).then((r) => r.data as LearningPlanResponse),
+      api.post('/ai-tools/learning-plan', { language_code: lang, level: planLevel || undefined }).then((r) => r.data as LearningPlanResponse),
     onSuccess: (data) => { setPlan(data); setPlanOpen(true); },
   });
 
@@ -186,6 +187,19 @@ export default function DashboardPage() {
                 {languages?.map((l) => (
                   <option key={l.code} value={l.code}>{l.flag_emoji} {l.name}</option>
                 ))}
+              </select>
+              <select
+                value={planLevel}
+                onChange={(e) => setPlanLevel(e.target.value)}
+                className="w-full border border-gray-200 rounded-xl p-2.5 text-sm text-gray-800 mb-3 bg-white focus:outline-none focus:ring-2 focus:ring-violet-400"
+              >
+                <option value="">— рівень (авто за XP) —</option>
+                <option value="A1">A1 — Початковий</option>
+                <option value="A2">A2 — Елементарний</option>
+                <option value="B1">B1 — Середній</option>
+                <option value="B2">B2 — Вище середнього</option>
+                <option value="C1">C1 — Просунутий</option>
+                <option value="C2">C2 — Вільне володіння</option>
               </select>
               <button
                 disabled={!planLangCode || planMutation.isPending}
