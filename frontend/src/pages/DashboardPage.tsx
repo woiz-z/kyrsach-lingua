@@ -8,6 +8,7 @@ import {
   Loader2, Brain,
 } from 'lucide-react';
 import api from '../services/api';
+import { FlagDisplay } from '../components/FlagDisplay';
 import { useAuthStore } from '../store/authStore';
 import type { Language, UserStats, UserStreak, LearningPlanResponse } from '../types';
 import { CardSkeleton } from '../components/ui/Skeleton';
@@ -352,7 +353,7 @@ export default function DashboardPage() {
             {languages?.slice(0, 8).map((lang) => (
               <motion.div key={lang.id} variants={item}>
                 <Link to={`/languages?lang=${lang.id}`} className="block glass rounded-2xl p-5 hover:shadow-lg hover-lift transition-all border border-transparent hover:border-primary-100 dark:hover:border-primary-500/30">
-                  <span className="text-4xl mb-3 block">{lang.flag_emoji}</span>
+                  <div className="mb-3"><FlagDisplay emoji={lang.flag_emoji} heightClass="h-8" textClass="text-4xl" /></div>
                   <h3 className="font-bold text-gray-900">{lang.name}</h3>
                   <p className="text-sm text-gray-500">{lang.native_name}</p>
                 </Link>

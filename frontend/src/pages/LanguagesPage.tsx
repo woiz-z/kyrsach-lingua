@@ -4,6 +4,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { BookOpen, ChevronRight, AlertCircle, Search, Sparkles, GraduationCap, Layers, Trash2 } from 'lucide-react';
 import api from '../services/api';
+import { FlagDisplay } from '../components/FlagDisplay';
 import type { Language, Course, GenerationJob } from '../types';
 import { toast } from '../components/ui/Toast';
 import { useAuthStore } from '../store/authStore';
@@ -302,7 +303,7 @@ export default function LanguagesPage() {
       {hasPreselectedLang && selectedLanguage && (
         <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="mb-4 glass rounded-2xl p-4 flex items-center justify-between gap-3 border border-primary-100">
           <div className="flex items-center gap-3">
-            <span className="text-3xl">{selectedLanguage.flag_emoji}</span>
+            <FlagDisplay emoji={selectedLanguage.flag_emoji} heightClass="h-8" textClass="text-3xl" />
             <div>
               <p className="font-semibold text-gray-900">{selectedLanguage.name}</p>
               <p className="text-sm text-gray-500">{selectedLanguage.native_name}</p>
@@ -350,7 +351,7 @@ export default function LanguagesPage() {
                   : 'border-transparent hover:border-gray-200'
               }`}
             >
-              <div className="text-4xl mb-2">{lang.flag_emoji}</div>
+              <div className="mb-2 flex items-center justify-start"><FlagDisplay emoji={lang.flag_emoji} heightClass="h-8" textClass="text-4xl" /></div>
               <div className="font-bold text-gray-900">{lang.name}</div>
               <div className="text-sm text-gray-500">{lang.native_name}</div>
             </motion.button>
