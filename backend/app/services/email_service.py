@@ -97,6 +97,14 @@ def send_password_reset_email(to_email: str, reset_url: str, full_name: str) -> 
     msg["To"] = to_email
     msg.attach(MIMEText(html_body, "html", "utf-8"))
 
+    if not settings.SMTP_USER or not settings.SMTP_PASSWORD:
+        logger.warning(
+            "SMTP not configured — skipping email to %s. Reset URL: %s",
+            to_email,
+            reset_url,
+        )
+        return
+
     context = ssl.create_default_context()
     try:
         with smtplib.SMTP(settings.SMTP_HOST, settings.SMTP_PORT, timeout=15) as server:
@@ -107,4 +115,3 @@ def send_password_reset_email(to_email: str, reset_url: str, full_name: str) -> 
         logger.info("Password-reset email sent to %s", to_email)
     except Exception:
         logger.exception("Failed to send password-reset email to %s", to_email)
-        raise
