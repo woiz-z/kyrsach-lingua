@@ -441,12 +441,14 @@ Return JSON:
         instruction_language = (course_language or "Ukrainian").strip()
         system_prompt = (
             "You are an expert language teacher creating rich, immersive, university-quality lesson content. "
-            "Your lessons should feel like they come from a premium language-learning platform — "
-            "detailed theory with clear explanations, practical examples, cultural notes, tips, "
-            "and a diverse mix of exercise types to reinforce learning. "
+            "Your lessons should feel like they come from a premium language-learning platform. "
+            "Write EXTENSIVE, DETAILED theory sections — each section must be a thorough explanation with "
+            "grammar tables, conjugation paradigms, declension tables, usage rules, common patterns, "
+            "exception lists, idiomatic expressions, cultural context, and multiple illustrative examples. "
+            "The theory must be so complete that a student can learn the topic from theory alone without any other resource. "
             "Return valid JSON only — no markdown outside JSON, no extra text."
         )
-        user_prompt = f"""Create a {language_name} lesson.
+        user_prompt = f"""Create a comprehensive {language_name} lesson with EXTENSIVE theory.
 
 DETAILS:
 - Topic: {topic}
@@ -456,12 +458,19 @@ DETAILS:
 - Language for all text (titles, theory, hints, explanations): {instruction_language}
 - Target language for examples and answers: {language_name}
 
-CONTENT (keep concise to fit the response budget):
-- 2-3 sections with type, title, and markdown content (100-200 words each).
+THEORY REQUIREMENTS (most important part — write A LOT):
+- 4-6 sections with type, title, and detailed markdown content (300-600 words EACH minimum).
 - Section types: intro, theory, rule, tip, dialogue, cultural_note, practice.
-- Use 1-2 emojis per section (🎯💡🗣️📝🌍).
-- 4-6 vocabulary entries: {{"word": "translation"}}.
-- 2-3 example sentences.
+- Use 1-2 emojis per section title (🎯💡🗣️📝🌍).
+- Each theory/rule section MUST include:
+  * Full explanation of the grammar/vocabulary rule with all sub-cases
+  * A complete table or paradigm (conjugation table, declension table, word forms, etc.) formatted in markdown
+  * 6-10 example sentences with translations showing the rule in different contexts
+  * Common mistakes learners make and how to avoid them
+  * At least 2 cultural notes or usage tips
+  * Related expressions, synonyms, or antonyms where applicable
+- 8-15 vocabulary entries: {{"word": "translation"}}.
+- 5-8 example sentences.
 
 EXERCISES:
 - Mix types: multiple_choice, fill_blank, translate, true_false, open_answer, reorder_words.
