@@ -326,6 +326,7 @@ export default function LessonPage() {
       setShowConfetti(true);
       play('complete');
       qc.invalidateQueries({ queryKey: ['progress'] });
+      qc.invalidateQueries({ queryKey: ['user-lesson-progress'] });
       qc.invalidateQueries({ queryKey: ['stats'] });
       qc.invalidateQueries({ queryKey: ['streak'] });
     },
@@ -375,9 +376,23 @@ export default function LessonPage() {
     setSavingVocab(true);
     try {
       const langCode = course?.language?.code ?? 'en';
+      // For translate/fill_blank exercises, question IS the foreign word.
+      // For multiple_choice and others, question is a Ukrainian instruction —
+      // correct_answer is the foreign word; extract quoted text as the translation.
+      const isQuestionTheWord = exercise.exercise_type === 'translate' || exercise.exercise_type === 'fill_blank';
+      let vocabWord: string;
+      let vocabTranslation: string;
+      if (isQuestionTheWord) {
+        vocabWord = exercise.question;
+        vocabTranslation = exercise.correct_answer;
+      } else {
+        vocabWord = exercise.correct_answer;
+        const quotedMatch = exercise.question.match(/[''"«»]([^''"«»]+)[''"«»]/);
+        vocabTranslation = quotedMatch ? quotedMatch[1] : exercise.question;
+      }
       await api.post('/vocabulary/', {
-        word: exercise.question,
-        translation: exercise.correct_answer,
+        word: vocabWord,
+        translation: vocabTranslation,
         language_code: langCode,
         lesson_id: lesson?.id,
       });

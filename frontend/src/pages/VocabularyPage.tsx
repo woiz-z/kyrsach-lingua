@@ -63,7 +63,9 @@ export default function VocabularyPage() {
     mutationFn: ({ id, quality }: { id: number; quality: number }) =>
       api.post(`/vocabulary/${id}/review`, { quality }),
     onSuccess: () => {
-      qc.invalidateQueries({ queryKey: ['vocabulary-due'] });
+      // Do NOT invalidate vocabulary-due mid-session — that refetches the list
+      // and shrinks it while reviewIdx has already advanced, causing items to be skipped.
+      // Only refresh the all-words list so review_count updates there.
       qc.invalidateQueries({ queryKey: ['vocabulary'] });
     },
   });
