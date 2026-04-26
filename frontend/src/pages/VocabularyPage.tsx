@@ -31,6 +31,19 @@ const QUALITY_LABELS = [
 const container = { hidden: {}, show: { transition: { staggerChildren: 0.05 } } };
 const item = { hidden: { opacity: 0, y: 12 }, show: { opacity: 1, y: 0 } };
 
+/** Convert ISO 639-1 language code to flag emoji (e.g. 'en' → '🇬🇧', 'uk' → '🇺🇦') */
+function codeToFlag(code: string): string {
+  const map: Record<string, string> = {
+    en: '🇬🇧', uk: '🇺🇦', fr: '🇫🇷', de: '🇩🇪', es: '🇪🇸', it: '🇮🇹',
+    pt: '🇵🇹', pl: '🇵🇱', nl: '🇳🇱', cs: '🇨🇿', sk: '🇸🇰', ru: '🇷🇺',
+    ja: '🇯🇵', zh: '🇨🇳', ko: '🇰🇷', ar: '🇸🇦', tr: '🇹🇷', sv: '🇸🇪',
+    no: '🇳🇴', da: '🇩🇰', fi: '🇫🇮', hu: '🇭🇺', ro: '🇷🇴', bg: '🇧🇬',
+    hr: '🇭🇷', sr: '🇷🇸', he: '🇮🇱', hi: '🇮🇳', vi: '🇻🇳', th: '🇹🇭',
+    id: '🇮🇩', ms: '🇲🇾', el: '🇬🇷', lt: '🇱🇹', lv: '🇱🇻', et: '🇪🇪',
+  };
+  return map[code?.toLowerCase()] ?? code?.toUpperCase() ?? '?';
+}
+
 export default function VocabularyPage() {
   const qc = useQueryClient();
   const { speak, isSupported: ttsSupported } = useTTS();
@@ -231,7 +244,7 @@ export default function VocabularyPage() {
                       <span className="text-gray-600">{word.translation}</span>
                       {word.language_code && (
                         <span className="text-xs bg-primary-50 text-primary-600 px-2 py-0.5 rounded-full font-medium">
-                          {word.language_code.toUpperCase()}
+                          {codeToFlag(word.language_code)}
                         </span>
                       )}
                     </div>
@@ -346,7 +359,7 @@ export default function VocabularyPage() {
                   {/* Word card */}
                   <div className="p-8 text-center">
                     <p className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-4">
-                      {dueItems[reviewIdx].language_code?.toUpperCase() || 'СЛОВО'}
+                      {dueItems[reviewIdx].language_code ? codeToFlag(dueItems[reviewIdx].language_code!) : 'СЛОВО'}
                     </p>
                     <div className="flex items-center justify-center gap-3 mb-3">
                       <h2 className="text-4xl font-extrabold text-gray-900">
