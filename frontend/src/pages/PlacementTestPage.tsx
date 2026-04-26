@@ -235,15 +235,21 @@ export default function PlacementTestPage() {
               <p className="text-gray-600 mb-6">{result.feedback}</p>
 
               <div className="grid grid-cols-5 gap-2 mb-8">
-                {questions.map((q) => (
-                  <div key={q.id} className="flex flex-col items-center gap-1">
-                    <span className="text-xs text-gray-400">{q.level}</span>
-                    {result.correct_per_level[q.level]
-                      ? <CheckCircle2 className="w-6 h-6 text-emerald-500" />
-                      : <XCircle className="w-6 h-6 text-red-400" />
-                    }
-                  </div>
-                ))}
+                {['A1', 'A2', 'B1', 'B2', 'C1'].map((lv) => {
+                  const correct = result.correct_per_level[lv] ?? 0;
+                  const questionsForLevel = questions.filter((q) => q.level === lv).length || 5;
+                  const passed = correct > questionsForLevel / 2;
+                  return (
+                    <div key={lv} className="flex flex-col items-center gap-1">
+                      <span className="text-xs font-bold text-gray-500">{lv}</span>
+                      {passed
+                        ? <CheckCircle2 className="w-6 h-6 text-emerald-500" />
+                        : <XCircle className="w-6 h-6 text-red-400" />
+                      }
+                      <span className="text-xs text-gray-400">{correct}/{questionsForLevel}</span>
+                    </div>
+                  );
+                })}
               </div>
 
               <p className="text-gray-500 mb-6 text-sm">

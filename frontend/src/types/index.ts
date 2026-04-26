@@ -247,7 +247,7 @@ export interface PlacementTestResult {
   score: number;
   total: number;
   feedback: string;
-  correct_per_level: Record<string, boolean>;
+  correct_per_level: Record<string, number>;
 }
 
 // ─── AI Tools ────────────────────────────────────────────────────────────────
