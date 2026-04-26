@@ -1,3 +1,4 @@
+import random
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from pydantic import BaseModel, Field
@@ -53,8 +54,18 @@ def generate_placement_test(
     if not language:
         raise HTTPException(status_code=404, detail="Language not found")
 
-    prompt = f"""Generate a placement test for learning {language.name}.
+    # Random seed ensures unique questions each run
+    seed = random.randint(1000, 9999)
+    topic_hints = [
+        "travel and transport", "food and cooking", "body and health", "home and furniture",
+        "school and studies", "work and career", "nature and animals", "shopping and money",
+        "sports and hobbies", "technology and internet", "culture and traditions", "weather and seasons",
+    ]
+    topic = random.choice(topic_hints)
+
+    prompt = f"""Generate a NEW placement test (seed={seed}, topic_hint='{topic}') for learning {language.name}.
 Create exactly 5 multiple-choice questions, one for each level: A1, A2, B1, B2, C1.
+Make the questions UNIQUE and DIFFERENT from any previous test — use varied vocabulary, sentence structures and topics.
 Return ONLY valid JSON (no extra text):
 {{
   "questions": [
@@ -69,15 +80,15 @@ Return ONLY valid JSON (no extra text):
   ]
 }}
 Rules:
-- A1: basic greetings, numbers, colors
+- A1: basic greetings, numbers, colors, simple words
 - A2: present/past tense, family words, everyday phrases
 - B1: conditional, past perfect, idioms
 - B2: nuanced grammar, complex sentences, phrasal verbs
 - C1: advanced idioms, subjunctive, literary vocabulary
-Each correct_answer MUST exactly match one of the options."""
+Each correct_answer MUST exactly match one of the options (same string)."""
 
     try:
-        data_json = ai_service.complete_json(prompt, temperature=0.3, max_tokens=2000)
+        data_json = ai_service.complete_json(prompt, temperature=0.85, max_tokens=2000)
         questions = [PlacementQuestion(**q) for q in data_json["questions"]]
     except Exception as e:
         raise HTTPException(status_code=502, detail=f"AI error: {e}")
@@ -106,10 +117,15 @@ def evaluate_placement_test(
             score += 1
 
     levels = ["A1", "A2", "B1", "B2", "C1"]
+    # Find highest consecutive pass from A1 upward.
+    # Stop at the first failed level so a lucky guess at a higher level
+    # doesn't override a gap (e.g. A1✓ A2✓ B1✓ B2✗ C1✓ → B1, not C1).
     determined_level = "A1"
     for lv in levels:
         if correct_per_level.get(lv, False):
             determined_level = lv
+        else:
+            break
 
     if score == len(data.questions):
         determined_level = "C1+"
