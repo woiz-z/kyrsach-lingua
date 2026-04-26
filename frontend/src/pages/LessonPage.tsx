@@ -665,16 +665,26 @@ export default function LessonPage() {
               <div>
                 <p className="text-sm font-semibold text-gray-800">Готові практикуватись? 💪</p>
                 <p className="text-xs text-gray-500 mt-0.5">
-                  {exercises?.length ? `${exercises.length} вправ на вас чекає` : 'Вправи доступні'}
+                  {exercises?.length ? `${exercises.length} вправ на вас чекає` : 'Вправи ще не згенеровані'}
                 </p>
               </div>
-              <button
-                onClick={() => setTab('exercises')}
-                disabled={!exercises?.length}
-                className="flex items-center gap-2 px-5 py-2.5 rounded-xl gradient-bg text-white font-semibold text-sm shadow-md shadow-primary-500/20 hover:shadow-primary-500/35 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex-shrink-0"
-              >
-                До вправ <ChevronRight className="w-4 h-4" />
-              </button>
+              {exercises?.length ? (
+                <button
+                  onClick={() => setTab('exercises')}
+                  className="flex items-center gap-2 px-5 py-2.5 rounded-xl gradient-bg text-white font-semibold text-sm shadow-md shadow-primary-500/20 hover:shadow-primary-500/35 transition-all flex-shrink-0"
+                >
+                  До вправ <ChevronRight className="w-4 h-4" />
+                </button>
+              ) : !exercisesLoading ? (
+                <button
+                  onClick={() => completeMutation.mutate()}
+                  disabled={completeMutation.isPending}
+                  className="flex items-center gap-2 px-5 py-2.5 rounded-xl gradient-bg text-white font-semibold text-sm shadow-md shadow-primary-500/20 hover:shadow-primary-500/35 transition-all flex-shrink-0 disabled:opacity-50"
+                >
+                  {completeMutation.isPending ? <Loader2 className="w-4 h-4 animate-spin" /> : <Trophy className="w-4 h-4" />}
+                  Завершити урок
+                </button>
+              ) : null}
             </motion.div>
           </motion.div>
         )}
@@ -695,14 +705,24 @@ export default function LessonPage() {
                 </div>
                 <p className="text-gray-600 font-medium mb-1">Вправи ще не згенеровані</p>
                 <p className="text-sm text-gray-400 mb-5">AI створить персоналізовані вправи по темі уроку</p>
-                <button
-                  onClick={handleGenerateMore}
-                  disabled={generatingMore}
-                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl gradient-bg text-white font-medium shadow-md shadow-primary-500/20"
-                >
-                  {generatingMore ? <Loader2 className="w-4 h-4 animate-spin" /> : <Sparkles className="w-4 h-4" />}
-                  Згенерувати вправи
-                </button>
+                <div className="flex flex-col items-center gap-3">
+                  <button
+                    onClick={handleGenerateMore}
+                    disabled={generatingMore}
+                    className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl gradient-bg text-white font-medium shadow-md shadow-primary-500/20"
+                  >
+                    {generatingMore ? <Loader2 className="w-4 h-4 animate-spin" /> : <Sparkles className="w-4 h-4" />}
+                    Згенерувати вправи
+                  </button>
+                  <button
+                    onClick={() => completeMutation.mutate()}
+                    disabled={completeMutation.isPending}
+                    className="inline-flex items-center gap-2 px-4 py-2 rounded-xl border border-gray-200 text-gray-600 font-medium text-sm hover:bg-gray-50 transition-all disabled:opacity-50"
+                  >
+                    {completeMutation.isPending ? <Loader2 className="w-4 h-4 animate-spin" /> : <Trophy className="w-4 h-4" />}
+                    Завершити урок (без вправ)
+                  </button>
+                </div>
               </div>
             ) : (
               <>
