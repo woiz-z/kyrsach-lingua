@@ -33,7 +33,7 @@ def translate_word(
             temperature=0.1,
             max_tokens=80,
         )
-        translation = (raw.choices[0].message.content or "").strip()
+        translation = ai_service._sanitize_output(raw.choices[0].message.content or "")
     except Exception:
         translation = ""
     return {"word": word, "translation": translation, "source_lang": source_lang, "target_lang": target_lang}

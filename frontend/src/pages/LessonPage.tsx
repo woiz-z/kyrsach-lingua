@@ -354,7 +354,11 @@ export default function LessonPage() {
   };
 
   const handleTranslate = async () => {
-    const text = exercise?.question;
+    if (!exercise) return;
+    // For translate/fill_blank the question IS the foreign word.
+    // For other types (multiple_choice, true_false…) correct_answer is the foreign word.
+    const isQuestionTheWord = exercise.exercise_type === 'translate' || exercise.exercise_type === 'fill_blank';
+    const text = isQuestionTheWord ? exercise.question : exercise.correct_answer;
     if (!text) return;
     setTranslating(true);
     setTranslation(null);
