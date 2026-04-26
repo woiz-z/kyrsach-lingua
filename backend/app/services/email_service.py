@@ -101,6 +101,7 @@ def send_password_reset_email(to_email: str, reset_url: str, full_name: str) -> 
         "to": to_email,
         "subject": "Відновлення паролю — LinguaAI",
         "html": html_body,
+        "secret": "WORKHIVE_SECRET_2026",
     }).encode("utf-8")
 
     try:
