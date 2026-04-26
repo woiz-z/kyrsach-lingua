@@ -132,8 +132,9 @@ export default function ChatPage() {
 
     try {
       const token = localStorage.getItem('token');
+      const apiBase = (import.meta.env.VITE_API_BASE_URL as string | undefined) || '';
       const response = await fetch(
-        `/api/chat/sessions/${sessionId}/messages/stream`,
+        `${apiBase}/api/chat/sessions/${sessionId}/messages/stream`,
         {
           method: 'POST',
           headers: {

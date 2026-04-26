@@ -164,10 +164,20 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
+import os as _os
+
+_raw_origins = _os.getenv("ALLOWED_ORIGINS", "")
+if _raw_origins == "*" or not _raw_origins:
+    _allow_origins = ["*"]
+    _allow_credentials = False  # credentials can't be used with wildcard
+else:
+    _allow_origins = [o.strip() for o in _raw_origins.split(",") if o.strip()]
+    _allow_credentials = True
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173", "http://localhost:5174", "http://localhost:3000", "http://127.0.0.1:5173", "http://127.0.0.1:5174"],
-    allow_credentials=True,
+    allow_origins=_allow_origins,
+    allow_credentials=_allow_credentials,
     allow_methods=["*"],
     allow_headers=["*"],
 )
