@@ -235,7 +235,7 @@ export default function VocabularyPage() {
                 <motion.div
                   key={word.id}
                   variants={item}
-                  className="glass rounded-2xl px-5 py-4 border border-gray-100 flex items-center gap-4 hover-lift transition-all"
+                  className="glass-premium rounded-2xl px-5 py-4 border border-gray-100 dark:border-white/8 flex items-center gap-4 hover-lift card-accent-top transition-all"
                 >
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-3 flex-wrap">
@@ -338,10 +338,11 @@ export default function VocabularyPage() {
                 <span className="text-gray-500">{reviewIdx + 1} / {dueItems.length}</span>
                 <div className="h-2 flex-1 mx-4 bg-gray-100 rounded-full overflow-hidden">
                   <motion.div
-                    className="h-full gradient-bg rounded-full"
+                    className="h-full lesson-progress-fill rounded-full"
                     initial={{ width: 0 }}
                     animate={{ width: `${((reviewIdx) / dueItems.length) * 100}%` }}
                     transition={{ duration: 0.4 }}
+                    style={{ width: `${((reviewIdx) / dueItems.length) * 100}%` }}
                   />
                 </div>
                 <span className="text-primary-600 font-semibold">{Math.round((reviewIdx / dueItems.length) * 100)}%</span>
@@ -357,42 +358,43 @@ export default function VocabularyPage() {
                   className="glass-strong rounded-2xl border border-gray-100 overflow-hidden"
                 >
                   {/* Word card */}
-                  <div className="p-8 text-center">
-                    <p className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-4">
-                      {dueItems[reviewIdx].language_code ? codeToFlag(dueItems[reviewIdx].language_code!) : 'СЛОВО'}
-                    </p>
-                    <div className="flex items-center justify-center gap-3 mb-3">
-                      <h2 className="text-4xl font-extrabold text-gray-900">
-                        {dueItems[reviewIdx].word}
-                      </h2>
-                      {ttsSupported && (
+                  <div className="p-8 text-center flashcard-scene" style={{ minHeight: '200px' }}>
+                    <div className={`flashcard-inner${showAnswer ? ' flipped' : ''}`} style={{ minHeight: '160px' }}>
+                      {/* Front face — word side */}
+                      <div className="flashcard-face flex flex-col items-center justify-center p-4">
+                        <p className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-4">
+                          {dueItems[reviewIdx].language_code ? codeToFlag(dueItems[reviewIdx].language_code!) : 'СЛОВО'}
+                        </p>
+                        <div className="flex items-center justify-center gap-3 mb-3">
+                          <h2 className="text-4xl font-extrabold gradient-text-animated">
+                            {dueItems[reviewIdx].word}
+                          </h2>
+                          {ttsSupported && (
+                            <button
+                              onClick={() => speak(dueItems[reviewIdx].word, dueItems[reviewIdx].language_code || 'en')}
+                              className="p-2 rounded-xl text-gray-400 hover:text-blue-500 hover:bg-blue-50 transition-all"
+                              title="Прослухати"
+                            >
+                              <Volume2 className="w-5 h-5" />
+                            </button>
+                          )}
+                        </div>
+                        {dueItems[reviewIdx].context && (
+                          <p className="text-sm text-gray-400 italic mb-4">
+                            Контекст: {dueItems[reviewIdx].context}
+                          </p>
+                        )}
                         <button
-                          onClick={() => speak(dueItems[reviewIdx].word, dueItems[reviewIdx].language_code || 'en')}
-                          className="p-2 rounded-xl text-gray-400 hover:text-blue-500 hover:bg-blue-50 transition-all"
-                          title="Прослухати"
+                          onClick={() => setShowAnswer(true)}
+                          className="flex items-center gap-2 mx-auto px-6 py-3 rounded-xl border-2 border-primary-200 text-primary-600 font-semibold hover:bg-primary-50 transition-all"
                         >
-                          <Volume2 className="w-5 h-5" />
+                          Показати переклад <ChevronRight className="w-4 h-4" />
                         </button>
-                      )}
-                    </div>
-                    {dueItems[reviewIdx].context && (
-                      <p className="text-sm text-gray-400 italic mb-4">
-                        Контекст: {dueItems[reviewIdx].context}
-                      </p>
-                    )}
-                    {!showAnswer ? (
-                      <button
-                        onClick={() => setShowAnswer(true)}
-                        className="flex items-center gap-2 mx-auto px-6 py-3 rounded-xl border-2 border-primary-200 text-primary-600 font-semibold hover:bg-primary-50 transition-all"
-                      >
-                        Показати переклад <ChevronRight className="w-4 h-4" />
-                      </button>
-                    ) : (
-                      <motion.div
-                        initial={{ opacity: 0, y: 8 }}
-                        animate={{ opacity: 1, y: 0 }}
-                      >
-                        <p className="text-2xl font-bold text-primary-600 mb-6">
+                      </div>
+                      {/* Back face — translation side */}
+                      <div className="flashcard-face flashcard-back flex flex-col items-center justify-center p-4">
+                        <p className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-4">Переклад</p>
+                        <p className="text-2xl font-bold gradient-text mb-6">
                           {dueItems[reviewIdx].translation}
                         </p>
                         <p className="text-sm text-gray-500 mb-4">Наскільки добре ви згадали?</p>
@@ -408,8 +410,8 @@ export default function VocabularyPage() {
                             </button>
                           ))}
                         </div>
-                      </motion.div>
-                    )}
+                      </div>
+                    </div>
                   </div>
 
                   {/* Card metadata */}
