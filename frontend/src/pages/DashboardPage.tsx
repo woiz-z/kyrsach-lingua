@@ -91,12 +91,13 @@ export default function DashboardPage() {
       ) : (
         <motion.div variants={container} initial="hidden" animate="show" className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-10">
           {statCards.map((s) => (
-            <motion.div key={s.label} variants={item} className={`glass-premium stat-card-glow rounded-2xl p-5 border ${s.border} hover-lift card-accent-top`}>
+            <motion.div key={s.label} variants={item} className={`glass-premium stat-card-glow rounded-2xl p-5 border ${s.border} hover-lift card-accent-top group relative overflow-hidden`}>
               <div className={`w-10 h-10 rounded-xl ${s.bg} flex items-center justify-center mb-3 transition-transform duration-300 group-hover:scale-110`}>
                 <s.icon className={`w-5 h-5 ${s.color}${s.label === 'Поточний страйк' && (streak?.current_streak ?? 0) > 0 ? ' animate-flame' : ''}`} />
               </div>
-              <p className="text-2xl font-bold text-gray-900">{s.value}</p>
+              <p className="text-2xl font-bold gradient-text">{s.value}</p>
               <p className="text-sm text-gray-500">{s.label}</p>
+              <div className="absolute bottom-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-primary-400/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
             </motion.div>
           ))}
         </motion.div>
@@ -161,7 +162,7 @@ export default function DashboardPage() {
         <DailyTasksCard />
 
         {/* AI Learning Plan */}
-        <div className="glass rounded-2xl p-6 border border-white/20">
+        <div className="glass-premium rounded-2xl p-6 border border-white/20 card-accent-top">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-2">
               <Brain className="w-5 h-5 text-violet-500" />
@@ -353,7 +354,7 @@ export default function DashboardPage() {
       {/* Languages */}
       <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}>
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-2xl font-bold">Доступні мови</h2>
+          <h2 className="text-2xl font-bold gradient-text">Доступні мови</h2>
           <Link to="/languages" className="text-primary-500 text-sm font-medium hover:underline flex items-center gap-1">
             Усі мови <ArrowRight className="w-4 h-4" />
           </Link>
@@ -366,7 +367,7 @@ export default function DashboardPage() {
           <motion.div variants={container} initial="hidden" animate="show" className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {languages?.slice(0, 8).map((lang) => (
               <motion.div key={lang.id} variants={item}>
-                <Link to={`/languages?lang=${lang.id}`} className="block glass-premium rounded-2xl p-5 card-accent-top hover-lift transition-all border border-transparent hover:border-primary-100 dark:hover:border-primary-500/30">
+                <Link to={`/languages?lang=${lang.id}`} className="block lang-gem-card glass-premium rounded-2xl p-5 card-accent-top hover-lift transition-all border border-transparent hover:border-primary-100 dark:hover:border-primary-500/30">
                   <div className="mb-3"><FlagDisplay emoji={lang.flag_emoji} heightClass="h-8" textClass="text-4xl" /></div>
                   <h3 className="font-bold text-gray-900">{lang.name}</h3>
                   <p className="text-sm text-gray-500">{lang.native_name}</p>
