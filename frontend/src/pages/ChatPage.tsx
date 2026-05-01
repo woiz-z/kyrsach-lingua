@@ -11,7 +11,6 @@ import {
   Languages as LangIcon,
   HelpCircle,
   Trash2,
-  Loader2,
   Menu,
   X,
 } from 'lucide-react';
@@ -216,7 +215,7 @@ export default function ChatPage() {
       <div className="p-4">
         <button
           onClick={() => setShowNew(!showNew)}
-          className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl text-white font-semibold gradient-bg shadow-lg shadow-primary-500/25 hover:shadow-primary-500/40 transition-all"
+          className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl text-white font-semibold gradient-bg shadow-lg shadow-primary-500/25 hover:shadow-primary-500/40 transition-all btn-shine"
         >
           <Plus className="w-5 h-5" /> Новий чат
         </button>
@@ -389,7 +388,7 @@ export default function ChatPage() {
                 <Brain className="w-4 h-4 text-white" />
               </div>
               <div className="min-w-0">
-                <p className="font-semibold text-sm text-gray-900 truncate">
+                <p className="font-semibold text-sm truncate gradient-text-animated">
                   {currentSession?.title || 'AI Чат'}
                 </p>
                 <p className="text-xs text-gray-400">
@@ -431,9 +430,7 @@ export default function ChatPage() {
                 >
                   <div
                     className={`max-w-[80%] sm:max-w-[75%] px-4 py-3 text-sm leading-relaxed whitespace-pre-wrap ${
-                      msg.role === 'user'
-                        ? 'bg-primary-500 text-white rounded-2xl rounded-tr-sm shadow-md shadow-primary-500/15'
-                        : 'glass-strong rounded-2xl rounded-tl-sm text-gray-800 border border-gray-100 dark:border-white/8'
+                      msg.role === 'user' ? 'chat-bubble-user' : 'chat-bubble-ai'
                     }`}
                   >
                     {msg.content}
@@ -454,12 +451,11 @@ export default function ChatPage() {
               )}
               {streaming && !streamContent && (
                 <div className="flex justify-start">
-                  <div className="glass-strong rounded-2xl rounded-tl-sm px-4 py-3 border border-gray-100 dark:border-white/8">
+                  <div className="chat-bubble-ai px-4 py-3">
                     <div className="flex items-center gap-1.5">
-                      <Loader2 className="w-4 h-4 text-primary-500 animate-spin" />
-                      <span className="text-xs text-gray-400">
-                        {"AI думає..."}
-                      </span>
+                      <span className="w-2 h-2 rounded-full bg-primary-400 animate-bounce" style={{ animationDelay: '0ms' }} />
+                      <span className="w-2 h-2 rounded-full bg-primary-400 animate-bounce" style={{ animationDelay: '150ms' }} />
+                      <span className="w-2 h-2 rounded-full bg-primary-400 animate-bounce" style={{ animationDelay: '300ms' }} />
                     </div>
                   </div>
                 </div>
