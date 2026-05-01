@@ -21,6 +21,7 @@ class CourseResponse(BaseModel):
     level: str
     order: int
     image_url: str | None = None
+    language: LanguageResponse | None = None
 
     class Config:
         from_attributes = True

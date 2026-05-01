@@ -30,6 +30,7 @@ import {
   Brain,
   Flame,
   Shield,
+  RotateCcw,
 } from 'lucide-react';
 import api from '../services/api';
 import type { Lesson, Course, Exercise, ExerciseResult } from '../types';
@@ -955,6 +956,16 @@ export default function LessonPage() {
                               ) : (
                                 <>🏆 Завершити урок</>
                               )}
+                            </button>
+                          )}
+
+                          {result && !result.is_correct && (
+                            <button
+                              onClick={() => { setResult(null); setAnswer(''); }}
+                              className="flex items-center gap-1.5 px-4 py-2.5 rounded-xl text-orange-600 bg-orange-50 border border-orange-200 text-sm font-medium hover:bg-orange-100 transition-colors"
+                            >
+                              <RotateCcw className="w-3.5 h-3.5" />
+                              Спробувати ще раз
                             </button>
                           )}
 
