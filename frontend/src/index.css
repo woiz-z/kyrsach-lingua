@@ -651,7 +651,7 @@ html.dark .input-glass:focus {
   background: rgba(255,255,255,0.85);
   backdrop-filter: blur(24px) saturate(2.2);
   -webkit-backdrop-filter: blur(24px) saturate(2.2);
-  border: 1px solid transparent;
+  border: 1px solid rgba(99,102,241,0.2);
   box-shadow:
     0 8px 40px rgba(99,102,241,0.14),
     0 2px 8px rgba(0,0,0,0.05),
@@ -844,13 +844,13 @@ html.dark .bento-card::before {
 
 /* ─── WOW: Lesson answer states ────────────────────────────── */
 .answer-correct {
-  background: rgba(16,185,129,0.12) !important;
-  border-color: rgba(16,185,129,0.5) !important;
+  background: rgba(16,185,129,0.12);
+  border-color: rgba(16,185,129,0.5);
   box-shadow: 0 0 12px rgba(16,185,129,0.2);
 }
 .answer-wrong {
-  background: rgba(239,68,68,0.1) !important;
-  border-color: rgba(239,68,68,0.45) !important;
+  background: rgba(239,68,68,0.1);
+  border-color: rgba(239,68,68,0.45);
   box-shadow: 0 0 12px rgba(239,68,68,0.15);
 }
 
@@ -903,9 +903,9 @@ html.dark .bento-card::before {
   background: rgba(99,102,241,0.1);
   border: 1px solid rgba(99,102,241,0.2);
   border-radius: 1.25rem 1.25rem 1.25rem 0.25rem;
-  color: var(--color-gray-800, #1e293b);
+  color: #1e293b;
 }
-.dark .chat-bubble-ai {
+html.dark .chat-bubble-ai {
   color: #c7d2fe;
 }
 .chat-bubble-user {
@@ -936,6 +936,7 @@ html.dark .bento-card::before {
   border-radius: 50%;
   background: radial-gradient(ellipse, rgba(245,158,11,0.5), transparent 70%);
   filter: blur(8px);
+  pointer-events: none;
 }
 
 /* ─── WOW: Course color headers per language ───────────────── */
@@ -948,3 +949,10 @@ html.dark .bento-card::before {
 .lang-header-it { background: linear-gradient(135deg, rgba(16,185,129,0.18) 0%, rgba(52,211,153,0.1) 100%); }
 .lang-header-pt { background: linear-gradient(135deg, rgba(16,185,129,0.18) 0%, rgba(59,130,246,0.1) 100%); }
 .lang-header-default { background: linear-gradient(135deg, rgba(99,102,241,0.15) 0%, rgba(168,85,247,0.08) 100%); }
+
+/* ─── Accessibility: reduced motion ────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .avatar-aurora-ring { animation: none; }
+  .answer-shake { animation: none; }
+  .flashcard-inner { transition: none; }
+}
