@@ -116,7 +116,7 @@ export default function ProfilePage() {
           <User className="w-5 h-5 text-white" />
         </div>
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Профіль</h1>
+          <h1 className="text-2xl font-bold gradient-text-animated">Профіль</h1>
           <p className="text-sm text-gray-500">Ваші налаштування</p>
         </div>
       </motion.div>
@@ -133,7 +133,7 @@ export default function ProfilePage() {
             <div className="absolute w-20 h-20 bg-white rounded-full bottom-0 left-12" />
           </div>
           <div className="relative">
-            <div className="w-20 h-20 rounded-2xl bg-white/20 backdrop-blur-sm border-2 border-white/40 flex items-center justify-center shadow-lg">
+            <div className="w-20 h-20 rounded-2xl bg-white/20 backdrop-blur-sm border-2 border-white/40 flex items-center justify-center avatar-aurora-ring">
               {user?.avatar_url ? (
                 <span className="text-4xl leading-none">{user.avatar_url}</span>
               ) : (
@@ -220,7 +220,7 @@ export default function ProfilePage() {
                   onChange={(e) =>
                     setForm({ ...form, username: e.target.value })
                   }
-                  className="mt-1.5 w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 focus:border-primary-400 focus:ring-2 focus:ring-primary-100 outline-none transition text-sm"
+                  className="mt-1.5 w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-white/10 bg-gray-50 dark:bg-white/5 text-gray-900 dark:text-gray-100 focus:border-primary-400 focus:ring-2 focus:ring-primary-100 dark:focus:ring-primary-500/20 outline-none transition text-sm"
                 />
               </div>
               <div>
@@ -233,7 +233,7 @@ export default function ProfilePage() {
                   onChange={(e) =>
                     setForm({ ...form, email: e.target.value })
                   }
-                  className="mt-1.5 w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 focus:border-primary-400 focus:ring-2 focus:ring-primary-100 outline-none transition text-sm"
+                  className="mt-1.5 w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-white/10 bg-gray-50 dark:bg-white/5 text-gray-900 dark:text-gray-100 focus:border-primary-400 focus:ring-2 focus:ring-primary-100 dark:focus:ring-primary-500/20 outline-none transition text-sm"
                 />
               </div>
               <div>
@@ -245,7 +245,7 @@ export default function ProfilePage() {
                   onChange={(e) =>
                     setForm({ ...form, full_name: e.target.value })
                   }
-                  className="mt-1.5 w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 focus:border-primary-400 focus:ring-2 focus:ring-primary-100 outline-none transition text-sm"
+                  className="mt-1.5 w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-white/10 bg-gray-50 dark:bg-white/5 text-gray-900 dark:text-gray-100 focus:border-primary-400 focus:ring-2 focus:ring-primary-100 dark:focus:ring-primary-500/20 outline-none transition text-sm"
                 />
               </div>
               <div className="flex gap-3 pt-2">
@@ -271,7 +271,7 @@ export default function ProfilePage() {
             </>
           ) : (
             <div className="space-y-4">
-              <div className="flex items-center gap-3 p-3 rounded-xl bg-gray-50/80">
+              <div className="flex items-center gap-3 p-3 rounded-xl glass border border-white/10 dark:border-white/6 hover-lift transition-all">
                 <AtSign className="w-4 h-4 text-gray-400" />
                 <div>
                   <p className="text-xs text-gray-400">{"Ім'я користувача"}</p>
@@ -280,7 +280,7 @@ export default function ProfilePage() {
                   </p>
                 </div>
               </div>
-              <div className="flex items-center gap-3 p-3 rounded-xl bg-gray-50/80">
+              <div className="flex items-center gap-3 p-3 rounded-xl glass border border-white/10 dark:border-white/6 hover-lift transition-all">
                 <Mail className="w-4 h-4 text-gray-400" />
                 <div>
                   <p className="text-xs text-gray-400">Електронна пошта</p>
@@ -289,7 +289,7 @@ export default function ProfilePage() {
                   </p>
                 </div>
               </div>
-              <div className="flex items-center gap-3 p-3 rounded-xl bg-gray-50/80">
+              <div className="flex items-center gap-3 p-3 rounded-xl glass border border-white/10 dark:border-white/6 hover-lift transition-all">
                 <User className="w-4 h-4 text-gray-400" />
                 <div>
                   <p className="text-xs text-gray-400">{"Повне ім'я"}</p>
@@ -298,7 +298,7 @@ export default function ProfilePage() {
                   </p>
                 </div>
               </div>
-              <div className="flex items-center gap-3 p-3 rounded-xl bg-gray-50/80">
+              <div className="flex items-center gap-3 p-3 rounded-xl glass border border-white/10 dark:border-white/6 hover-lift transition-all">
                 <Calendar className="w-4 h-4 text-gray-400" />
                 <div>
                   <p className="text-xs text-gray-400">Дата реєстрації</p>
@@ -307,7 +307,7 @@ export default function ProfilePage() {
                   </p>
                 </div>
               </div>
-              <div className="flex items-center gap-3 p-3 rounded-xl bg-gray-50/80">
+              <div className="flex items-center gap-3 p-3 rounded-xl glass border border-white/10 dark:border-white/6 hover-lift transition-all">
                 <Shield className="w-4 h-4 text-gray-400" />
                 <div>
                   <p className="text-xs text-gray-400">Статус</p>
