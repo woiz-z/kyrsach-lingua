@@ -91,8 +91,8 @@ export default function DashboardPage() {
       ) : (
         <motion.div variants={container} initial="hidden" animate="show" className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-10">
           {statCards.map((s) => (
-            <motion.div key={s.label} variants={item} className={`glass rounded-2xl p-5 border ${s.border} hover-lift`}>
-              <div className={`w-10 h-10 rounded-xl ${s.bg} flex items-center justify-center mb-3`}>
+            <motion.div key={s.label} variants={item} className={`glass-premium stat-card-glow rounded-2xl p-5 border ${s.border} hover-lift card-accent-top`}>
+              <div className={`w-10 h-10 rounded-xl ${s.bg} flex items-center justify-center mb-3 transition-transform duration-300 group-hover:scale-110`}>
                 <s.icon className={`w-5 h-5 ${s.color}${s.label === 'Поточний страйк' && (streak?.current_streak ?? 0) > 0 ? ' animate-flame' : ''}`} />
               </div>
               <p className="text-2xl font-bold text-gray-900">{s.value}</p>
@@ -109,8 +109,8 @@ export default function DashboardPage() {
         transition={{ delay: 0.2 }}
         className="grid md:grid-cols-2 lg:grid-cols-4 gap-4 mb-10"
       >
-        <Link to="/chat" className="group glass rounded-2xl p-6 hover:shadow-xl hover-lift transition-all flex items-center gap-4 border border-transparent hover:border-primary-100 dark:hover:border-primary-500/30">
-          <div className="w-14 h-14 rounded-2xl gradient-bg flex items-center justify-center shrink-0 shadow-lg shadow-primary-500/25 group-hover:shadow-primary-500/35 transition-shadow">
+        <Link to="/chat" className="group glass-premium rounded-2xl p-6 card-accent-top hover-lift transition-all flex items-center gap-4 border border-transparent hover:border-primary-100 dark:hover:border-primary-500/30">
+          <div className="w-14 h-14 rounded-2xl gradient-bg flex items-center justify-center shrink-0 shadow-lg shadow-primary-500/30 group-hover:shadow-primary-500/45 group-hover:scale-110 transition-all">
             <MessageSquare className="w-7 h-7 text-white" />
           </div>
           <div className="flex-1">
@@ -119,8 +119,8 @@ export default function DashboardPage() {
           </div>
           <ArrowRight className="w-5 h-5 text-gray-300 group-hover:text-primary-500 group-hover:translate-x-1 transition-all" />
         </Link>
-        <Link to="/languages" className="group glass rounded-2xl p-6 hover:shadow-xl hover-lift transition-all flex items-center gap-4 border border-transparent hover:border-purple-100 dark:hover:border-purple-500/30">
-          <div className="w-14 h-14 rounded-2xl bg-purple-500 flex items-center justify-center shrink-0 shadow-lg shadow-purple-500/25 group-hover:shadow-purple-500/35 transition-shadow">
+        <Link to="/languages" className="group glass-premium rounded-2xl p-6 card-accent-top hover-lift transition-all flex items-center gap-4 border border-transparent hover:border-purple-100 dark:hover:border-purple-500/30">
+          <div className="w-14 h-14 rounded-2xl bg-purple-500 flex items-center justify-center shrink-0 shadow-lg shadow-purple-500/30 group-hover:shadow-purple-500/45 group-hover:scale-110 transition-all">
             <Sparkles className="w-7 h-7 text-white" />
           </div>
           <div className="flex-1">
@@ -129,8 +129,8 @@ export default function DashboardPage() {
           </div>
           <ArrowRight className="w-5 h-5 text-gray-300 group-hover:text-purple-500 group-hover:translate-x-1 transition-all" />
         </Link>
-        <Link to="/progress" className="group glass rounded-2xl p-6 hover:shadow-xl hover-lift transition-all flex items-center gap-4 border border-transparent hover:border-emerald-100 dark:hover:border-emerald-500/30">
-          <div className="w-14 h-14 rounded-2xl bg-emerald-500 flex items-center justify-center shrink-0 shadow-lg shadow-emerald-500/25 group-hover:shadow-emerald-500/35 transition-shadow">
+        <Link to="/progress" className="group glass-premium rounded-2xl p-6 card-accent-top hover-lift transition-all flex items-center gap-4 border border-transparent hover:border-emerald-100 dark:hover:border-emerald-500/30">
+          <div className="w-14 h-14 rounded-2xl bg-emerald-500 flex items-center justify-center shrink-0 shadow-lg shadow-emerald-500/30 group-hover:shadow-emerald-500/45 group-hover:scale-110 transition-all">
             <Target className="w-7 h-7 text-white" />
           </div>
           <div className="flex-1">
@@ -139,8 +139,8 @@ export default function DashboardPage() {
           </div>
           <ArrowRight className="w-5 h-5 text-gray-300 group-hover:text-emerald-500 group-hover:translate-x-1 transition-all" />
         </Link>
-        <Link to="/review" className="group glass rounded-2xl p-6 hover:shadow-xl hover-lift transition-all flex items-center gap-4 border border-transparent hover:border-blue-100 dark:hover:border-blue-500/30 md:col-span-3 lg:col-span-1">
-          <div className="w-14 h-14 rounded-2xl bg-blue-500 flex items-center justify-center shrink-0 shadow-lg shadow-blue-500/25 group-hover:shadow-blue-500/35 transition-shadow">
+        <Link to="/review" className="group glass-premium rounded-2xl p-6 card-accent-top hover-lift transition-all flex items-center gap-4 border border-transparent hover:border-blue-100 dark:hover:border-blue-500/30 md:col-span-3 lg:col-span-1">
+          <div className="w-14 h-14 rounded-2xl bg-blue-500 flex items-center justify-center shrink-0 shadow-lg shadow-blue-500/30 group-hover:shadow-blue-500/45 group-hover:scale-110 transition-all">
             <RotateCcw className="w-7 h-7 text-white" />
           </div>
           <div className="flex-1">
@@ -321,8 +321,8 @@ export default function DashboardPage() {
         transition={{ delay: 0.3 }}
         className="grid sm:grid-cols-3 gap-4 mb-10"
       >
-        <Link to="/mini-game" className="group glass rounded-xl p-4 hover-lift flex items-center gap-3 border border-transparent hover:border-amber-100">
-          <div className="w-10 h-10 rounded-xl bg-amber-500 flex items-center justify-center shrink-0">
+        <Link to="/mini-game" className="group glass-premium rounded-xl p-4 hover-lift flex items-center gap-3 border border-transparent hover:border-amber-100">
+          <div className="w-10 h-10 rounded-xl bg-amber-500 flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform shadow-sm shadow-amber-500/30">
             <Gamepad2 className="w-5 h-5 text-white" />
           </div>
           <div>
@@ -330,8 +330,8 @@ export default function DashboardPage() {
             <p className="text-xs text-gray-500">Слово ↔ переклад</p>
           </div>
         </Link>
-        <Link to="/placement-test" className="group glass rounded-xl p-4 hover-lift flex items-center gap-3 border border-transparent hover:border-teal-100">
-          <div className="w-10 h-10 rounded-xl bg-teal-500 flex items-center justify-center shrink-0">
+        <Link to="/placement-test" className="group glass-premium rounded-xl p-4 hover-lift flex items-center gap-3 border border-transparent hover:border-teal-100">
+          <div className="w-10 h-10 rounded-xl bg-teal-500 flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform shadow-sm shadow-teal-500/30">
             <GraduationCap className="w-5 h-5 text-white" />
           </div>
           <div>
@@ -339,8 +339,8 @@ export default function DashboardPage() {
             <p className="text-xs text-gray-500">A1 → C1 оцінка</p>
           </div>
         </Link>
-        <Link to="/achievements" className="group glass rounded-xl p-4 hover-lift flex items-center gap-3 border border-transparent hover:border-yellow-100">
-          <div className="w-10 h-10 rounded-xl bg-yellow-500 flex items-center justify-center shrink-0">
+        <Link to="/achievements" className="group glass-premium rounded-xl p-4 hover-lift flex items-center gap-3 border border-transparent hover:border-yellow-100">
+          <div className="w-10 h-10 rounded-xl bg-yellow-500 flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform shadow-sm shadow-yellow-500/30">
             <Trophy className="w-5 h-5 text-white" />
           </div>
           <div>
@@ -366,7 +366,7 @@ export default function DashboardPage() {
           <motion.div variants={container} initial="hidden" animate="show" className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {languages?.slice(0, 8).map((lang) => (
               <motion.div key={lang.id} variants={item}>
-                <Link to={`/languages?lang=${lang.id}`} className="block glass rounded-2xl p-5 hover:shadow-lg hover-lift transition-all border border-transparent hover:border-primary-100 dark:hover:border-primary-500/30">
+                <Link to={`/languages?lang=${lang.id}`} className="block glass-premium rounded-2xl p-5 card-accent-top hover-lift transition-all border border-transparent hover:border-primary-100 dark:hover:border-primary-500/30">
                   <div className="mb-3"><FlagDisplay emoji={lang.flag_emoji} heightClass="h-8" textClass="text-4xl" /></div>
                   <h3 className="font-bold text-gray-900">{lang.name}</h3>
                   <p className="text-sm text-gray-500">{lang.native_name}</p>

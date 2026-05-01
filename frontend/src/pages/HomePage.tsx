@@ -29,10 +29,11 @@ export default function HomePage() {
     <div className="overflow-hidden">
       {/* Hero */}
       <section className="relative min-h-[92vh] flex items-center">
-        <div className="absolute inset-0 gradient-bg opacity-[0.03]" />
-        <div className="absolute top-20 right-10 w-72 h-72 rounded-full bg-primary-400/10 blur-3xl animate-pulse-soft" />
-        <div className="absolute bottom-20 left-10 w-96 h-96 rounded-full bg-purple-400/10 blur-3xl animate-pulse-soft" style={{ animationDelay: '2s' }} />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-pink-300/5 blur-[100px]" />
+        <div className="absolute inset-0 gradient-bg opacity-[0.06]" />
+        <div className="absolute top-16 right-8 w-[380px] h-[380px] rounded-full bg-primary-400/18 blur-[90px] animate-pulse-soft" />
+        <div className="absolute bottom-16 left-8 w-[480px] h-[480px] rounded-full bg-purple-400/15 blur-[100px] animate-pulse-soft" style={{ animationDelay: '2s' }} />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] rounded-full bg-pink-300/8 blur-[120px] animate-pulse-soft" style={{ animationDelay: '4s' }} />
+        <div className="absolute top-[20%] left-[20%] w-[200px] h-[200px] rounded-full bg-indigo-300/12 blur-[60px] animate-pulse-soft" style={{ animationDelay: '1s' }} />
 
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
           <div className="grid lg:grid-cols-2 gap-16 items-center">
@@ -41,14 +42,14 @@ export default function HomePage() {
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: 0.2 }}
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary-50 text-primary-600 text-sm font-medium mb-6 border border-primary-100"
+                className="section-badge mb-6"
               >
-                <Sparkles className="w-4 h-4" />
+                <Sparkles className="w-3.5 h-3.5" />
                 Powered by AI — Llama 3.3 70B
               </motion.div>
               <h1 className="text-5xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight leading-[1.08] mb-6 text-balance">
                 Вивчай мови з{' '}
-                <span className="gradient-text">AI‑репетитором</span>
+                <span className="gradient-text-animated">AI‑репетитором</span>
               </h1>
               <p className="text-xl text-gray-500 leading-relaxed mb-10 max-w-lg">
                 Інтерактивна платформа з персональним AI-асистентом, структурованими уроками
@@ -58,7 +59,7 @@ export default function HomePage() {
                 {user ? (
                   <Link
                     to="/dashboard"
-                    className="group inline-flex items-center gap-2 px-8 py-4 rounded-2xl text-lg font-semibold text-white gradient-bg shadow-xl shadow-primary-500/25 hover:shadow-primary-500/40 hover:scale-[1.02] transition-all"
+                    className="btn-shine group inline-flex items-center gap-2 px-8 py-4 rounded-2xl text-lg font-semibold text-white gradient-bg shadow-xl shadow-primary-500/30 hover:shadow-primary-500/45 hover:scale-[1.03] transition-all"
                   >
                     Перейти до навчання
                     <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
@@ -67,14 +68,14 @@ export default function HomePage() {
                   <>
                     <Link
                       to="/register"
-                      className="group inline-flex items-center gap-2 px-8 py-4 rounded-2xl text-lg font-semibold text-white gradient-bg shadow-xl shadow-primary-500/25 hover:shadow-primary-500/40 hover:scale-[1.02] transition-all"
+                      className="btn-shine group inline-flex items-center gap-2 px-8 py-4 rounded-2xl text-lg font-semibold text-white gradient-bg shadow-xl shadow-primary-500/30 hover:shadow-primary-500/45 hover:scale-[1.03] transition-all"
                     >
                       Почати безкоштовно
                       <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                     </Link>
                     <Link
                       to="/login"
-                      className="inline-flex items-center gap-2 px-8 py-4 rounded-2xl text-lg font-semibold text-gray-700 bg-white border border-gray-200 shadow-sm hover:shadow-lg hover:border-gray-300 transition-all"
+                      className="inline-flex items-center gap-2 px-8 py-4 rounded-2xl text-lg font-semibold text-gray-700 glass border border-white/60 shadow-sm hover:shadow-lg hover:border-primary-100 hover:scale-[1.01] transition-all"
                     >
                       Увійти
                     </Link>
@@ -90,8 +91,8 @@ export default function HomePage() {
                 className="mt-12 grid grid-cols-4 gap-4"
               >
                 {stats.map((s) => (
-                  <div key={s.label} className="text-center">
-                    <div className="w-10 h-10 rounded-xl bg-primary-50 flex items-center justify-center mx-auto mb-2">
+                  <div key={s.label} className="text-center group">
+                    <div className="w-10 h-10 rounded-xl glass-premium flex items-center justify-center mx-auto mb-2 group-hover:scale-110 transition-transform">
                       <s.icon className="w-5 h-5 text-primary-500" />
                     </div>
                     <p className="text-lg font-bold text-gray-900">{s.value}</p>
@@ -109,7 +110,7 @@ export default function HomePage() {
             >
               <div className="relative">
                 <div className="absolute inset-0 gradient-bg rounded-3xl blur-2xl opacity-20 scale-105" />
-                <div className="relative glass-strong rounded-3xl p-8 space-y-4 shadow-2xl shadow-primary-500/10">
+                <div className="relative glass-premium rounded-3xl p-8 space-y-4 shadow-2xl shadow-primary-500/15">
                   <div className="flex items-center gap-3 mb-6">
                     <div className="w-10 h-10 rounded-full gradient-bg flex items-center justify-center shadow-lg shadow-primary-500/25">
                       <Brain className="w-5 h-5 text-white" />
@@ -176,11 +177,11 @@ export default function HomePage() {
             viewport={{ once: true }}
             className="text-center mb-16"
           >
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary-50 text-primary-600 text-sm font-medium mb-4 border border-primary-100">
+            <div className="section-badge mb-4">
               Можливості платформи
             </div>
             <h2 className="text-4xl font-extrabold mb-4 text-balance">
-              Все для <span className="gradient-text">ефективного навчання</span>
+              Все для <span className="gradient-text-animated">ефективного навчання</span>
             </h2>
             <p className="text-lg text-gray-500 max-w-2xl mx-auto">
               Поєднання AI-технологій, структурованих курсів та гейміфікації
@@ -189,8 +190,8 @@ export default function HomePage() {
 
           <motion.div variants={container} initial="hidden" whileInView="show" viewport={{ once: true }} className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
             {features.map((f) => (
-              <motion.div key={f.title} variants={item} className="group glass rounded-2xl p-6 hover:shadow-xl hover:shadow-primary-500/5 hover-lift transition-all duration-300">
-                <div className={`w-12 h-12 rounded-xl ${f.color} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300`}>
+              <motion.div key={f.title} variants={item} className="group glass rounded-2xl p-6 card-accent-top hover-lift transition-all duration-300 border border-transparent hover:border-primary-100/50 dark:hover:border-primary-500/20">
+                <div className={`w-12 h-12 rounded-xl ${f.color} flex items-center justify-center mb-4 group-hover:scale-110 group-hover:rotate-3 transition-transform duration-300`}>
                   <f.icon className="w-6 h-6" />
                 </div>
                 <h3 className="text-lg font-bold mb-2 text-gray-900">{f.title}</h3>
@@ -200,6 +201,9 @@ export default function HomePage() {
           </motion.div>
         </div>
       </section>
+
+      {/* Divider */}
+      <div className="max-w-5xl mx-auto px-4"><div className="divider-gradient" /></div>
 
       {/* How it works */}
       <section className="py-24 bg-gradient-to-b from-transparent to-primary-50/20">
@@ -211,7 +215,7 @@ export default function HomePage() {
             className="text-center mb-16"
           >
             <h2 className="text-4xl font-extrabold mb-4">
-              Як це <span className="gradient-text">працює</span>
+              Як це <span className="gradient-text-animated">працює</span>
             </h2>
             <p className="text-lg text-gray-500 max-w-2xl mx-auto">
               Три прості кроки до ефективного вивчення мови
@@ -230,13 +234,13 @@ export default function HomePage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.15 }}
-                className="relative text-center"
+                className="relative text-center group"
               >
                 <div className="relative inline-block mb-6">
-                  <div className="w-20 h-20 rounded-2xl bg-primary-50 flex items-center justify-center mx-auto border border-primary-100">
+                  <div className="w-20 h-20 rounded-2xl glass-premium flex items-center justify-center mx-auto group-hover:scale-105 transition-transform duration-300">
                     <s.icon className="w-9 h-9 text-primary-500" />
                   </div>
-                  <span className="absolute -top-2 -right-2 w-8 h-8 rounded-full gradient-bg text-white text-sm font-bold flex items-center justify-center shadow-lg shadow-primary-500/25">
+                  <span className="absolute -top-2 -right-2 w-8 h-8 rounded-full gradient-bg text-white text-sm font-bold flex items-center justify-center shadow-lg shadow-primary-500/30 group-hover:scale-110 transition-transform">
                     {s.step}
                   </span>
                 </div>
@@ -253,7 +257,7 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
             <h2 className="text-4xl font-extrabold mb-6">
-              Доступні <span className="gradient-text">мови</span>
+              Доступні <span className="gradient-text-animated">мови</span>
             </h2>
             <div className="flex flex-wrap justify-center gap-3 mb-12">
               {['🇬🇧 English', '🇩🇪 Deutsch', '🇫🇷 Français', '🇪🇸 Español', '🇮🇹 Italiano', '🇯🇵 日本語', '🇨🇳 中文', '🇵🇱 Polski'].map(
@@ -263,8 +267,8 @@ export default function HomePage() {
                     initial={{ opacity: 0, scale: 0.9 }}
                     whileInView={{ opacity: 1, scale: 1 }}
                     viewport={{ once: true }}
-                    transition={{ delay: i * 0.05 }}
-                    className="glass px-6 py-3 rounded-2xl text-lg font-medium hover:scale-105 hover:shadow-lg hover:shadow-primary-500/5 transition-all duration-300 cursor-default"
+                    transition={{ delay: i * 0.06 }}
+                    className="glass-premium px-6 py-3 rounded-2xl text-lg font-medium hover:scale-105 hover:shadow-lg hover:shadow-primary-500/10 transition-all duration-300 cursor-default"
                   >
                     {lang}
                   </motion.div>
@@ -274,7 +278,7 @@ export default function HomePage() {
             {!user && (
               <Link
                 to="/register"
-                className="group inline-flex items-center gap-2 px-8 py-4 rounded-2xl text-lg font-semibold text-white gradient-bg shadow-xl shadow-primary-500/25 hover:shadow-primary-500/40 hover:scale-[1.02] transition-all"
+                className="btn-shine group inline-flex items-center gap-2 px-8 py-4 rounded-2xl text-lg font-semibold text-white gradient-bg shadow-xl shadow-primary-500/30 hover:shadow-primary-500/45 hover:scale-[1.03] transition-all"
               >
                 Розпочати навчання <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </Link>
@@ -303,7 +307,7 @@ export default function HomePage() {
                 </p>
                 <Link
                   to="/register"
-                  className="group inline-flex items-center gap-2 px-8 py-4 rounded-2xl text-lg font-semibold text-primary-600 bg-white shadow-xl hover:shadow-2xl hover:scale-[1.02] transition-all"
+                  className="btn-shine group inline-flex items-center gap-2 px-8 py-4 rounded-2xl text-lg font-semibold text-primary-700 bg-white shadow-xl hover:shadow-2xl hover:scale-[1.03] transition-all"
                 >
                   Створити акаунт безкоштовно
                   <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />

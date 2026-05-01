@@ -42,14 +42,14 @@ export default function Navbar() {
   const isActive = (path: string) => location.pathname === path || (path !== '/dashboard' && location.pathname.startsWith(path));
 
   return (
-    <nav className={`sticky top-0 z-50 transition-all duration-300 ${scrolled ? 'glass-strong shadow-lg shadow-black/[0.03]' : 'glass'} border-b border-white/10`}>
+    <nav className={`sticky top-0 z-50 transition-all duration-300 ${scrolled ? 'glass-strong shadow-lg shadow-black/[0.04]' : 'glass'} border-b ${scrolled ? 'border-white/20 dark:border-violet-500/15' : 'border-white/10 dark:border-white/5'}`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           <Link to={user ? '/dashboard' : '/'} className="flex items-center gap-2.5 group">
-            <div className="w-9 h-9 rounded-xl gradient-bg flex items-center justify-center shadow-lg shadow-primary-500/25 group-hover:shadow-primary-500/40 transition-shadow">
+            <div className="w-9 h-9 rounded-xl gradient-bg flex items-center justify-center shadow-lg shadow-primary-500/30 group-hover:shadow-primary-500/50 group-hover:scale-105 transition-all duration-200">
               <BookOpen className="w-5 h-5 text-white" />
             </div>
-            <span className="text-xl font-bold gradient-text tracking-tight">LinguaAI</span>
+            <span className="text-xl font-bold gradient-text-animated tracking-tight">LinguaAI</span>
             <span className="hidden sm:inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-primary-50 dark:bg-primary-500/10 text-primary-600 dark:text-primary-400 text-[10px] font-bold uppercase tracking-wider border border-primary-100 dark:border-primary-500/20">
               <Sparkles className="w-3 h-3" /> Beta
             </span>
@@ -123,7 +123,7 @@ export default function Navbar() {
                 </Link>
                 <Link
                   to="/register"
-                  className="px-5 py-2 rounded-xl text-sm font-semibold text-white gradient-bg shadow-lg shadow-primary-500/25 hover:shadow-primary-500/40 hover:scale-[1.02] transition-all"
+                  className="btn-shine px-5 py-2 rounded-xl text-sm font-semibold text-white gradient-bg shadow-lg shadow-primary-500/30 hover:shadow-primary-500/45 hover:scale-[1.03] transition-all"
                 >
                   Реєстрація
                 </Link>
