@@ -43,6 +43,19 @@ const LESSON_TYPE_LABELS: Record<string, string> = {
   conversation: 'Розмовна',
 };
 
+function langHeaderClass(languageName: string): string {
+  const n = languageName.toLowerCase();
+  if (n.includes('english') || n.includes('англ')) return 'lang-header-en';
+  if (n.includes('german') || n.includes('deutsch') || n.includes('нім')) return 'lang-header-de';
+  if (n.includes('french') || n.includes('français') || n.includes('фран')) return 'lang-header-fr';
+  if (n.includes('spanish') || n.includes('español') || n.includes('іспан')) return 'lang-header-es';
+  if (n.includes('japan') || n.includes('японськ')) return 'lang-header-ja';
+  if (n.includes('chinese') || n.includes('китайськ')) return 'lang-header-zh';
+  if (n.includes('italian') || n.includes('italiano') || n.includes('італ')) return 'lang-header-it';
+  if (n.includes('portugu') || n.includes('португ')) return 'lang-header-pt';
+  return 'lang-header-default';
+}
+
 export default function CoursePage() {
   const { courseId } = useParams();
   const navigate = useNavigate();
@@ -196,7 +209,7 @@ export default function CoursePage() {
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.1 }}
-        className="glass-strong rounded-2xl p-5 mb-6 border border-primary-50"
+        className="glass-premium card-accent-top rounded-2xl p-5 mb-6 border border-primary-50"
       >
         <div className="flex items-center gap-2 mb-4">
           <div className="w-8 h-8 rounded-lg gradient-bg flex items-center justify-center">
@@ -427,14 +440,17 @@ export default function CoursePage() {
           initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.15 }}
-          className="glass rounded-2xl p-4 mb-6 border border-gray-100"
+          className={`glass-premium rounded-2xl p-4 mb-6 border border-gray-100 ${langHeaderClass(course?.language?.name ?? '')}`}
         >
           <div className="flex items-center justify-between text-sm mb-2">
             <span className="font-semibold text-gray-700">
               {'Прогрес курсу'}
             </span>
-            <span className="text-primary-600 font-bold">
-              {completedLessonsCount} / {lessons.length} {'уроків'}
+            <span className="font-bold">
+              <span className="gradient-text">{completedLessonsCount}</span>
+              {' / '}
+              <span className="gradient-text">{lessons.length}</span>
+              {' уроків'}
             </span>
           </div>
           <div className="h-3 bg-gray-100 rounded-full overflow-hidden">
@@ -462,10 +478,11 @@ export default function CoursePage() {
           animate="show"
           className="space-y-3"
         >
-          {lessons.map((lesson) => (
+          {lessons.map((lesson, idx) => (
             <motion.div key={lesson.id} variants={item}>
               {(() => {
                 const isCompleted = completedLessonIds.has(lesson.id);
+                const isNext = !isCompleted && lessons.slice(0, idx).every((l) => completedLessonIds.has(l.id));
                 return (
               <Link
                 to={`/lessons/${lesson.id}`}
@@ -505,6 +522,13 @@ export default function CoursePage() {
                   </p>
                 </div>
                 <div className="flex items-center gap-3 shrink-0">
+                  {isCompleted ? (
+                    <div className="w-3 h-3 rounded-full bg-emerald-400 shadow-[0_0_6px_rgba(16,185,129,0.6)] shrink-0" />
+                  ) : isNext ? (
+                    <div className="w-3 h-3 rounded-full bg-primary-500 animate-pulse shadow-[0_0_8px_rgba(99,102,241,0.5)] shrink-0" />
+                  ) : (
+                    <div className="w-3 h-3 rounded-full bg-gray-300 dark:bg-gray-600 shrink-0" />
+                  )}
                   <span className="flex items-center gap-1 text-sm text-amber-500 font-medium">
                     <Star className="w-4 h-4" /> {lesson.xp_reward}
                   </span>
