@@ -294,14 +294,14 @@ export default function LanguagesPage() {
   return (
     <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
-        <h1 className="text-3xl font-extrabold text-gray-900 mb-1">Оберіть мову</h1>
+        <h1 className="text-3xl font-extrabold gradient-text mb-1">Оберіть мову</h1>
         <p className="text-gray-500 mb-8">
           {hasPreselectedLang ? 'Генерація курсу для вибраної мови' : 'Виберіть мову для вивчення та оберіть курс'}
         </p>
       </motion.div>
 
       {hasPreselectedLang && selectedLanguage && (
-        <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="mb-4 glass rounded-2xl p-4 flex items-center justify-between gap-3 border border-primary-100">
+        <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="mb-4 glass glass-spin-border rounded-2xl p-4 flex items-center justify-between gap-3 border border-primary-100">
           <div className="flex items-center gap-3">
             <FlagDisplay emoji={selectedLanguage.flag_emoji} heightClass="h-8" textClass="text-3xl" />
             <div>
@@ -345,9 +345,9 @@ export default function LanguagesPage() {
               variants={item}
               whileTap={{ scale: 0.97 }}
               onClick={() => handleSelectLanguage(lang.id)}
-              className={`glass rounded-2xl p-5 text-left transition-all duration-200 border-2 hover-lift ${
+              className={`lang-gem-card glass rounded-2xl p-5 text-left transition-all duration-200 border-2 hover-lift ${
                 selectedLangId === lang.id
-                  ? 'border-primary-400 shadow-lg shadow-primary-500/10 bg-primary-50/30'
+                  ? 'selected border-primary-400 shadow-lg shadow-primary-500/10 bg-primary-50/30'
                   : 'border-transparent hover:border-gray-200'
               }`}
             >
@@ -374,7 +374,7 @@ export default function LanguagesPage() {
             </h2>
 
             {/* AI Course Generator */}
-            <div className="glass-strong rounded-2xl p-5 mb-6 border border-primary-50">
+            <div className="glass-premium card-accent-top rounded-2xl p-5 mb-6 border border-primary-50">
               <div className="flex items-center gap-2 mb-4">
                 <div className="w-8 h-8 rounded-lg gradient-bg flex items-center justify-center">
                   <Sparkles className="w-4 h-4 text-white" />
