@@ -121,7 +121,7 @@ export default function ProgressPage() {
           <BarChart3 className="w-5 h-5 text-white" />
         </div>
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Мій прогрес</h1>
+          <h1 className="text-2xl font-bold gradient-text-animated">Мій прогрес</h1>
           <p className="text-sm text-gray-500">Ваша статистика навчання</p>
         </div>
       </motion.div>
@@ -131,42 +131,42 @@ export default function ProgressPage() {
         {stats.map((s) => (
           <div
             key={s.label}
-            className="glass rounded-2xl p-4 border border-gray-100 hover-lift transition-all"
+            className="glass-premium rounded-2xl p-4 border border-gray-100 dark:border-white/8 hover-lift card-accent-top transition-all"
           >
             <div
               className={`w-10 h-10 rounded-xl ${s.bg} flex items-center justify-center mb-3`}
             >
               <s.icon className={`w-5 h-5 ${s.text}`} />
             </div>
-            <p className="text-2xl font-bold text-gray-900">{s.value}</p>
+            <p className="text-2xl font-bold gradient-text">{s.value}</p>
             <p className="text-xs text-gray-500 mt-0.5">{s.label}</p>
           </div>
         ))}
       </motion.div>
 
       <motion.div variants={item} className="grid lg:grid-cols-3 gap-4">
-        <div className="glass rounded-2xl p-5 border border-gray-100">
+        <div className="glass-premium rounded-2xl p-5 border border-gray-100 dark:border-white/8 card-accent-top">
           <div className="flex items-center gap-2 mb-3">
             <Activity className="w-5 h-5 text-primary-500" />
             <h2 className="font-bold text-gray-900">Якість відповідей</h2>
           </div>
-          <p className="text-3xl font-bold text-gray-900 mb-1">{completionRate}%</p>
+          <p className="text-3xl font-bold gradient-text mb-1">{completionRate}%</p>
           <p className="text-sm text-gray-500">{progress?.exercises_correct ?? 0} правильних із {progress?.exercises_completed ?? 0} виконаних вправ</p>
         </div>
-        <div className="glass rounded-2xl p-5 border border-gray-100">
+        <div className="glass-premium rounded-2xl p-5 border border-gray-100 dark:border-white/8 card-accent-top">
           <div className="flex items-center gap-2 mb-3">
             <Flame className="w-5 h-5 text-orange-500" />
             <h2 className="font-bold text-gray-900">Страйк</h2>
           </div>
-          <p className="text-3xl font-bold text-gray-900 mb-1">{streak?.current_streak ?? 0}</p>
+          <p className="text-3xl font-bold gradient-text mb-1">{streak?.current_streak ?? 0}</p>
           <p className="text-sm text-gray-500">Найдовший страйк: {streak?.longest_streak ?? progress?.longest_streak ?? 0} днів</p>
         </div>
-        <div className="glass rounded-2xl p-5 border border-gray-100">
+        <div className="glass-premium rounded-2xl p-5 border border-gray-100 dark:border-white/8 card-accent-top">
           <div className="flex items-center gap-2 mb-3">
             <Medal className="w-5 h-5 text-amber-500" />
             <h2 className="font-bold text-gray-900">Досягнення</h2>
           </div>
-          <p className="text-3xl font-bold text-gray-900 mb-1">{earnedAchievements.length}</p>
+          <p className="text-3xl font-bold gradient-text mb-1">{earnedAchievements.length}</p>
           <p className="text-sm text-gray-500">Зароблених бейджів у профілі</p>
         </div>
       </motion.div>
@@ -263,7 +263,7 @@ export default function ProgressPage() {
                 key={entry.user_id}
                 className={`flex items-center gap-4 px-5 py-3.5 transition-all ${
                   idx < leaderboard.length - 1 ? 'border-b border-gray-50 dark:border-white/5' : ''
-                } ${entry.rank <= 3 ? 'bg-amber-50/40 dark:bg-amber-500/5' : 'hover:bg-gray-50/60 dark:hover:bg-violet-500/8'}`}
+                } ${entry.rank === 1 ? 'lb-gold' : entry.rank === 2 ? 'lb-silver' : entry.rank === 3 ? 'lb-bronze' : 'hover:bg-gray-50/60 dark:hover:bg-violet-500/8'}`}
               >
                 <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm shrink-0 ${
                   entry.rank === 1 ? 'bg-amber-400 text-white shadow-lg shadow-amber-300/40' :
