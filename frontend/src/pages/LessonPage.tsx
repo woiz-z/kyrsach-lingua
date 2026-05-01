@@ -490,7 +490,7 @@ export default function LessonPage() {
             <div className="text-center">
               <div className="flex items-center gap-1.5 justify-center">
                 <Flame className="w-5 h-5 text-orange-500" />
-                <span className="text-2xl font-extrabold text-orange-700">100%</span>
+                <span className="gradient-text-animated text-2xl font-extrabold">100%</span>
               </div>
               <p className="text-xs text-orange-600 mt-0.5">завершено</p>
             </div>
@@ -751,6 +751,9 @@ export default function LessonPage() {
                     </div>
                     <span className="text-xs font-bold text-primary-600">{progress}% ✓</span>
                   </div>
+                  <div className="lesson-progress-bar">
+                    <div className="lesson-progress-fill" style={{ width: `${progress}%` }} />
+                  </div>
                 </div>
 
                 {/* Exercise card */}
@@ -762,7 +765,7 @@ export default function LessonPage() {
                       animate={{ opacity: 1, y: 0, scale: 1 }}
                       exit={{ opacity: 0, y: -12, scale: 0.98 }}
                       transition={{ duration: 0.25 }}
-                      className="rounded-2xl border border-gray-100 bg-white shadow-sm overflow-hidden mb-4"
+                      className="glass-spin-border rounded-2xl border border-gray-100 bg-white shadow-sm overflow-hidden mb-4"
                     >
                       {/* Exercise type header banner */}
                       {(() => {
@@ -814,9 +817,9 @@ export default function LessonPage() {
                                   onClick={() => setAnswer(opt)}
                                   className={`w-full text-left px-4 py-3.5 rounded-xl border-2 text-sm font-medium transition-all flex items-center gap-3 ${
                                     isCorrectAnswer
-                                      ? 'border-emerald-400 bg-emerald-50 text-emerald-800'
+                                      ? 'answer-correct border-emerald-400 bg-emerald-50 text-emerald-800'
                                       : isWrongSelected
-                                      ? 'border-red-400 bg-red-50 text-red-800'
+                                      ? 'answer-wrong answer-shake border-red-400 bg-red-50 text-red-800'
                                       : isSelected
                                       ? 'border-primary-400 bg-primary-50 text-primary-800'
                                       : 'border-gray-200 bg-white hover:border-primary-300 hover:bg-primary-50/40'
@@ -850,8 +853,8 @@ export default function LessonPage() {
                                   disabled={!!result}
                                   onClick={() => setAnswer(opt)}
                                   className={`py-4 rounded-xl border-2 font-bold text-sm transition-all flex items-center justify-center gap-2 ${
-                                    isCorrectAnswer ? 'border-emerald-400 bg-emerald-50 text-emerald-700'
-                                    : isWrongSelected ? 'border-red-400 bg-red-50 text-red-700'
+                                    isCorrectAnswer ? 'answer-correct border-emerald-400 bg-emerald-50 text-emerald-700'
+                                    : isWrongSelected ? 'answer-wrong answer-shake border-red-400 bg-red-50 text-red-700'
                                     : isSelected ? 'border-primary-400 bg-primary-50 text-primary-700'
                                     : 'border-gray-200 hover:border-primary-300 hover:bg-primary-50/40'
                                   }`}
