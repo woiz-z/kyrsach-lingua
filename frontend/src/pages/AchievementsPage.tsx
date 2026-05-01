@@ -26,11 +26,11 @@ export default function AchievementsPage() {
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <div className="flex items-center gap-3 mb-8">
-        <div className="w-10 h-10 rounded-xl gradient-bg flex items-center justify-center shadow-lg">
+        <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-400 to-amber-600 flex items-center justify-center shadow-lg shadow-amber-500/30">
           <Trophy className="w-5 h-5 text-white" />
         </div>
         <div>
-          <h1 className="text-2xl font-extrabold text-gray-900">Досягнення</h1>
+          <h1 className="text-2xl font-extrabold gradient-text-animated">Досягнення</h1>
           <p className="text-sm text-gray-500">
             {isLoading ? '…' : `${earned.length} / ${achievements?.length ?? 0} здобуто`}
           </p>
@@ -53,9 +53,9 @@ export default function AchievementsPage() {
                 className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
                 {earned.map((ach) => (
                   <motion.div key={ach.id} variants={item}
-                    className="glass rounded-2xl p-4 border border-emerald-100 text-center hover-lift relative">
+                    className="glass-premium rounded-2xl p-5 border border-amber-200 dark:border-amber-500/30 ach-earned-card hover-lift text-center relative overflow-hidden">
                     <CheckCircle2 className="absolute top-2 right-2 w-4 h-4 text-emerald-500" />
-                    <div className="text-4xl mb-2">{ach.icon}</div>
+                    <div className="text-5xl mb-3">{ach.icon}</div>
                     <p className="font-semibold text-gray-900 text-sm leading-tight">{ach.name}</p>
                     <p className="text-xs text-gray-500 mt-1">{ach.description}</p>
                     {ach.earned_at && (
@@ -79,7 +79,7 @@ export default function AchievementsPage() {
                 className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
                 {locked.map((ach) => (
                   <motion.div key={ach.id} variants={item}
-                    className="glass rounded-2xl p-4 border border-gray-100 text-center opacity-60 grayscale">
+                    className="glass rounded-2xl p-4 border border-gray-100 dark:border-white/6 text-center opacity-50 grayscale backdrop-blur-sm">
                     <div className="text-4xl mb-2">{ach.icon}</div>
                     <p className="font-semibold text-gray-700 text-sm leading-tight">{ach.name}</p>
                     <p className="text-xs text-gray-500 mt-1">{ach.description}</p>
