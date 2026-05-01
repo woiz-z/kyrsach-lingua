@@ -87,6 +87,19 @@ function useDebounce<T>(value: T, delay = 350): T {
   return debounced;
 }
 
+function langHeaderClass(languageName: string): string {
+  const n = languageName.toLowerCase();
+  if (n.includes('english') || n.includes('англ')) return 'lang-header-en';
+  if (n.includes('german') || n.includes('deutsch') || n.includes('нім')) return 'lang-header-de';
+  if (n.includes('french') || n.includes('français') || n.includes('фран')) return 'lang-header-fr';
+  if (n.includes('spanish') || n.includes('español') || n.includes('іспан')) return 'lang-header-es';
+  if (n.includes('japan') || n.includes('японськ')) return 'lang-header-ja';
+  if (n.includes('chinese') || n.includes('китайськ')) return 'lang-header-zh';
+  if (n.includes('italian') || n.includes('italiano') || n.includes('італ')) return 'lang-header-it';
+  if (n.includes('portugu') || n.includes('португ')) return 'lang-header-pt';
+  return 'lang-header-default';
+}
+
 export default function MyCoursesPage() {
   const queryClient = useQueryClient();
 
@@ -179,7 +192,7 @@ export default function MyCoursesPage() {
   return (
     <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="mb-8">
-        <h1 className="text-3xl font-extrabold text-gray-900 mb-1 flex items-center gap-3">
+        <h1 className="text-3xl font-extrabold text-gray-900 gradient-text-animated mb-1 flex items-center gap-3">
           <LayoutGrid className="w-8 h-8 text-primary-500" />
           Мої курси
         </h1>
@@ -200,13 +213,13 @@ export default function MyCoursesPage() {
             { icon: BookOpen, label: 'Уроків пройдено', value: `${totalCompleted}/${totalLessons}`, color: 'text-sky-500', bg: 'bg-sky-50 dark:bg-sky-500/10', border: 'border-sky-100 dark:border-sky-500/20' },
             { icon: Zap, label: 'XP з курсів', value: totalXp, color: 'text-amber-500', bg: 'bg-amber-50 dark:bg-amber-500/10', border: 'border-amber-100 dark:border-amber-500/20' },
           ].map(({ icon: Icon, label, value, color, bg, border }) => (
-            <div key={label} className={`glass rounded-2xl p-4 border ${border} flex items-center gap-3`}>
+            <div key={label} className={`glass-premium card-accent-top rounded-2xl p-4 border ${border} flex items-center gap-3`}>
               <div className={`w-9 h-9 rounded-xl ${bg} border ${border} flex items-center justify-center shrink-0`}>
                 <Icon className={`w-4 h-4 ${color}`} />
               </div>
               <div>
                 <p className="text-xs text-gray-500">{label}</p>
-                <p className="font-bold text-gray-900">{value}</p>
+                <p className="font-bold gradient-text">{value}</p>
               </div>
             </div>
           ))}
@@ -451,19 +464,21 @@ export default function MyCoursesPage() {
                     to={`/courses/${course.course_id}`}
                     className="group glass rounded-2xl p-5 border border-white/20 hover:border-primary-200 dark:hover:border-primary-500/30 transition-all hover-lift flex flex-col gap-3 h-full block"
                   >
-                    <div className="flex items-start justify-between gap-3">
-                      <div className="flex items-center gap-3 min-w-0">
-                        <span className="text-3xl shrink-0">{course.language_flag}</span>
-                        <div className="min-w-0">
-                          <p className="font-bold text-gray-900 truncate">{course.title}</p>
-                          <p className="text-sm text-gray-500 truncate">{course.language_name}</p>
+                    <div className={`${langHeaderClass(course.language_name)} px-5 pt-4 pb-3 -mx-5 -mt-5 mb-3 rounded-t-2xl`}>
+                      <div className="flex items-start justify-between gap-3">
+                        <div className="flex items-center gap-3 min-w-0">
+                          <span className="text-3xl shrink-0">{course.language_flag}</span>
+                          <div className="min-w-0">
+                            <p className="font-bold text-gray-900 truncate">{course.title}</p>
+                            <p className="text-sm text-gray-500 truncate">{course.language_name}</p>
+                          </div>
                         </div>
-                      </div>
-                      <div className="flex items-center gap-2 shrink-0">
-                        <span className={`text-xs font-bold px-2 py-0.5 rounded-full border ${LEVEL_COLORS[course.level] ?? 'bg-gray-100 text-gray-600 border-gray-200 dark:bg-white/8 dark:text-gray-400'}`}>
-                          {course.level}
-                        </span>
-                        {finished && <CheckCircle2 className="w-5 h-5 text-emerald-500" />}
+                        <div className="flex items-center gap-2 shrink-0">
+                          <span className={`text-xs font-bold px-2 py-0.5 rounded-full border ${LEVEL_COLORS[course.level] ?? 'bg-gray-100 text-gray-600 border-gray-200 dark:bg-white/8 dark:text-gray-400'}`}>
+                            {course.level}
+                          </span>
+                          {finished && <CheckCircle2 className="w-5 h-5 text-emerald-500" />}
+                        </div>
                       </div>
                     </div>
 
@@ -482,7 +497,7 @@ export default function MyCoursesPage() {
                       </div>
                       <div className="h-2 rounded-full bg-white/60 dark:bg-white/8 border border-gray-100 dark:border-white/10 overflow-hidden">
                         <div
-                          className={`h-full rounded-full transition-all duration-700 ${finished ? 'bg-emerald-400' : 'gradient-bg'}`}
+                          className={`h-full rounded-full transition-all duration-700 ${finished ? 'bg-emerald-400 shadow-[0_0_8px_rgba(16,185,129,0.4)]' : 'lesson-progress-fill'}`}
                           style={{ width: `${pct}%` }}
                         />
                       </div>
