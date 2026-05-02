@@ -681,6 +681,7 @@ html.dark .input-glass:focus {
   mask-composite: exclude;
   filter: blur(0.4px);
   transition: opacity 0.3s ease;
+  pointer-events: none;
 }
 
 html.dark .glass-spin-border {
